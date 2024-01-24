@@ -1,7 +1,7 @@
 class CardPlayer {
     var hand: Hand = Hand()
     var score: Int = 0
-    var name: String? = null
+    var name: String = ""
     var isAI: Boolean = false
 
     constructor() {

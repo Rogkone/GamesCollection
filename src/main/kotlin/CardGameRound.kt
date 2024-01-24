@@ -1,8 +1,9 @@
 class CardGameRound(var trump: String) {
     val playedCards: MutableList<Card> = mutableListOf()
-
-    fun addCard(card: Card) {
+    val playedCardsHash: MutableMap<String, Card> = mutableMapOf()
+    fun addCard(name: String, card: Card) {
         playedCards.add(card)
+        playedCardsHash.put(name, card)
     }
 
     fun getWinningPlayer(): Int {

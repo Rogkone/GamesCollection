@@ -61,7 +61,7 @@ class CardGame(
 
             val currentPlayerIndex = (i + startingPlayerIndex) % players.size
             val cardIndex = players[currentPlayerIndex].getPlayerCardIndex(gameRound.playedCards, gameRound.trump)
-            gameRound.addCard(players[currentPlayerIndex].hand.cards[cardIndex])
+            gameRound.addCard(players[currentPlayerIndex].name ,players[currentPlayerIndex].hand.cards[cardIndex])
 
             if (i == players.size - 1) {
                 val lastPlayerIndex = (startingPlayerIndex + players.size - 1) % players.size

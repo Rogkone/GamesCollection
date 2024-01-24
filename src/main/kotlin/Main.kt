@@ -2,7 +2,6 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Button
@@ -14,35 +13,47 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import coil3.compose.AsyncImage
 import java.awt.Toolkit
+
+fun main() = application {
+    var game by remember { mutableStateOf(CardGame(playerCount, cardCount, 0, deckId, deckSize)) }
+    Window(title = "Games Collection", onCloseRequest = ::exitApplication, state = stateMainWindow()) {
+        cardGame(remember { mutableStateOf(game) })
+    }
+}
 
 val initDeck = CardGame.getNewDeckAsync()
 val deckId = initDeck!!.deckID
 val deckSize = initDeck!!.remaining
-val cardCount = 5
-val playerCount = 4
+const val cardCount = 5
+const val playerCount = 6
 var trickString = ""
+
+//val buttonState by rememberUpdatedState(newValue = gameState.value.playedRounds) // updates UI?
 
 @Composable
 fun printPlayerHands(game: CardGame) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(200.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        columns = GridCells.Fixed(4),
+        modifier = Modifier.fillMaxWidth()
     ) {
         items(game.players.size) { index ->
-            printSingleHand(game.players[index])
-        }
-        if (game.playedRounds != 0) {
-            //printPlayedCards(game.gameRound.playedCards)
+            Row(
+                modifier = Modifier.height(150.dp).width(100.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                printSingleHand(game.players[index])
+            }
         }
     }
 }
 
 @Composable
-fun printPlayedCards(playedCards: MutableList<Card>) { //Not working ?
+fun printPlayedCards(playedCards: MutableMap<String, Card>) {
     Column {
         for (card in playedCards) {
-            Text(card.toString())
+            Text("${card.key} - ${card.value}")
         }
     }
 }
@@ -62,7 +73,6 @@ fun printSingleHand(player: CardPlayer) {
 @Composable
 fun printScoreboard(game: CardGame) {
     var totalScore = 0
-    var winnerText = ""
     Column(
         modifier = Modifier.padding(bottom = 16.dp)
     ) {
@@ -72,22 +82,28 @@ fun printScoreboard(game: CardGame) {
             totalScore += player.score
         }
     }
-    if (totalScore == cardCount) {
-        winnerText = (game.getWinner(game.players))
-    }
-    Text(winnerText)
 }
 
 @Composable
-fun myNextButton(gameState: MutableState<CardGame>) {
+fun cardGame(gameState: MutableState<CardGame>) {
+    var winnerText = ""
+    if (gameState.value.playedRounds == cardCount) {
+        winnerText = (gameState.value.getWinner(gameState.value.players))
+    }
     playerHands(gameState.value)
-    val buttonState by rememberUpdatedState(newValue = gameState.value.playedRounds) // updates UI?
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(450.dp))
+
+            AsyncImage(
+                model ="https://deckofcardsapi.com/static/img/6H.png",
+                contentDescription = "6 of Hearts")
+
+            Spacer(modifier = Modifier.height(400.dp))
+            Text(winnerText)
+            Spacer(modifier = Modifier.height(32.dp))
             Text(trickString)
             Spacer(modifier = Modifier.height(32.dp))
             Row(
@@ -95,11 +111,60 @@ fun myNextButton(gameState: MutableState<CardGame>) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                printScoreboard(gameState.value)
-                Button(onClick = {
-                    getNextAction(gameState)
-                }) {
-                    Text(if (gameState.value.playedRounds == cardCount) "New Game" else "Next")
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+
+                        ) {
+                            if (gameState.value.playedRounds != 0)
+                                printPlayedCards(gameState.value.gameRound.playedCardsHash)
+                            else
+                                Text("")
+
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+
+                        ) {
+                            printScoreboard(gameState.value)
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+
+                        ) {
+                            Button(onClick = {
+                                getNextAction(gameState)
+                            }) {
+                                Text(if (gameState.value.playedRounds == cardCount) "New Game" else "Next")
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -119,8 +184,6 @@ fun getNextAction(gameState: MutableState<CardGame>) {
 @Composable
 @Preview
 fun playerHands(game: CardGame) {
-    //val buttonState by rememberUpdatedState(newValue = game.playedRounds) // updates UI?
-    val players = game.players
     MaterialTheme {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -146,10 +209,3 @@ fun stateMainWindow(): WindowState {
     )
 }
 
-fun main() = application {
-    var game by remember { mutableStateOf(CardGame(playerCount, cardCount, 0, deckId, deckSize)) }
-    Window(title = "Games Collection", onCloseRequest = ::exitApplication, state = stateMainWindow()) {
-
-        myNextButton(remember { mutableStateOf(game) })
-    }
-}
