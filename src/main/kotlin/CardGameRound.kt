@@ -1,18 +1,20 @@
-class CardGameRound(var trump: String) {
+class CardGameRound(var trump: Card) {
     val playedCards: MutableList<Card> = mutableListOf()
-
-    fun addCard(card: Card) {
+    val playedCardsHash: MutableMap<String, Card> = mutableMapOf()
+    fun addCard(name: String, card: Card) {
         playedCards.add(card)
+        playedCardsHash.put(name, card)
     }
 
     fun getWinningPlayer(): Int {
         var index = 0
         var highestCard = playedCards[0]
+        var tempTrump = trump
         if (!checkIfTrumpWasPlayed()) {
-            trump = playedCards[0].suit
+            tempTrump = playedCards[0]
         }
         for ((i, card) in playedCards.withIndex()) {
-            if (card.getRank(trump) > highestCard.getRank(trump)) {
+            if (card.getRank(tempTrump.suit) > highestCard.getRank(tempTrump.suit)) {
                 highestCard = card
                 index = i
             }
@@ -22,7 +24,7 @@ class CardGameRound(var trump: String) {
 
     private fun checkIfTrumpWasPlayed(): Boolean {
         for (card in playedCards) {
-            if (card.suit == trump) {
+            if (card.suit == trump.suit) {
                 return true
             }
         }

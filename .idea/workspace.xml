@@ -5,17 +5,67 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Card.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/CardImages.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DrawCardResponse.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Hand.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9C.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9D.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9H.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9S.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AC.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AD.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AH.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JC.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JD.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JH.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KC.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KD.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KH.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QC.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QD.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QH.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QS.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/back.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Hand.kts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/AS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/back.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,13 +120,74 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Codersbay/Documents/Java/Github/HelloWorldKotlin2&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Codersbay/Documents/Java/Github/GamesCollection2&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
   }
 }</component>
+  <component name="RunManager" selected="Kotlin.MainKt">
+    <configuration name="GamesCollection2 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GamesCollection2 [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MainKt" />
+      <module name="GamesCollection.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Gradle.GamesCollection2 [build]" />
+        <item itemvalue="Gradle.GamesCollection2 [clean]" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -95,11 +206,15 @@
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="CardGame" memberName="playedRounds" />
+        <PinnedItemInfo parentTag="androidx.compose.runtime.SnapshotMutableStateImpl" memberName="value" />
       </pinned-members>
     </pin-to-top-manager>
     <watches-manager>
       <configuration name="JetRunConfigurationType">
         <watch expression="trickString" language="kotlin" />
+      </configuration>
+      <configuration name="GradleRunConfiguration">
+        <watch expression="((CardGame)this).gameRound" custom="CardGame" />
       </configuration>
     </watches-manager>
   </component>

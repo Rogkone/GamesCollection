@@ -1,8 +1,13 @@
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
 class CardPlayer {
     var hand: Hand = Hand()
     var score: Int = 0
-    var name: String? = null
+    var name: String = ""
     var isAI: Boolean = false
+    var selectedCardIndex by mutableStateOf(-1)
 
     constructor() {
         hand = Hand()
@@ -34,20 +39,7 @@ class CardPlayer {
      */
     fun getPlayerCardIndex(playedCards: List<Card>, trump: String): Int {
         if (!isAI) {
-            var index: Int
-            try {
-                println("$name:")
-                hand.printHand()
-                println("Welche Karte willst du spielen?")
-                index = readLine()!!.toInt() - 1
-                if (index < 0 || index > hand.cards.size) {
-                    throw IndexOutOfBoundsException()
-                }
-                return index
-            } catch (e: IndexOutOfBoundsException) {
-                println("Bitte eine gültige Zahl eingeben:")
-                return getPlayerCardIndex(playedCards, trump)
-            }
+            return selectedCardIndex
         } else {
             var secondaryTrump = trump
             if (!CardGameRound.checkIfTrumpWasPlayed(playedCards, trump) && playedCards.isNotEmpty()) {
@@ -73,9 +65,11 @@ class CardPlayer {
                 if (secondHighest > playedCardValues.maxOrNull()!!) {
                     return handCardValues.indexOf(secondHighest)
                 }
-                return handCardValues.indexOf(handCardValues.maxOrNull()!!)
+                selectedCardIndex = handCardValues.indexOf(handCardValues.maxOrNull()!!)
+                return selectedCardIndex
             } else {
-                return handCardValues.indexOf(handCardValues.minOrNull()!!)
+                selectedCardIndex = handCardValues.indexOf(handCardValues.maxOrNull()!!)
+                return selectedCardIndex
             }
         }
     }
