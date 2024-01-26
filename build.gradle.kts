@@ -2,7 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("jvm")
-    id("org.jetbrains.compose")
+    id("org.jetbrains.compose") version "1.6.0-alpha01"
 }
 
 group = "com.gamescol"
@@ -10,8 +10,8 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    //maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    //maven("https://packages.jetbrains.team/maven/p/skija/maven")
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://packages.jetbrains.team/maven/p/skija/maven")
     maven {
         url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
@@ -20,14 +20,27 @@ repositories {
     }
     google()
 }
+val osName = System.getProperty("os.name")
+val targetOs = when {
+    osName == "Mac OS X" -> "macos"
+    osName.startsWith("Win") -> "windows"
+    osName.startsWith("Linux") -> "linux"
+    else -> error("Unsupported OS: $osName")
+}
+
+val osArch = System.getProperty("os.arch")
+var targetArch = when (osArch) {
+    "x86_64", "amd64" -> "x64"
+    "aarch64" -> "arm64"
+    else -> error("Unsupported arch: $osArch")
+}
+
+val skiko_version = "0.7.90"
+val target = "${targetOs}-${targetArch}"
 
 val ktor_version = "2.3.7"
 
 dependencies {
-    // Note, if you develop a library, you should use compose.desktop.common.
-    // compose.desktop.currentOs should be used in launcher-sourceSet
-    // (in a separate module for demo project and in testMain).
-    // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
@@ -36,10 +49,16 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("org.slf4j:slf4j-simple:2.0.9")
     implementation("com.google.code.gson:gson:2.8.9")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0-RC1")
-
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
+    implementation("org.jetbrains.skija:skija-windows:0.93.6")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0-alpha01")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0-RC2")
+    implementation("androidx.compose.material:material:1.6.0-rc01")
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("org.jetbrains.skiko:skiko-awt-runtime-$target:$skiko_version")
 }
-
+System.setProperty("skiko.renderApi", "software")
 compose.desktop {
     application {
         mainClass = "MainKt"
