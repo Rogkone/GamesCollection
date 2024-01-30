@@ -1,0 +1,4 @@
+package DiceGame
+
+class DiceGameRound {
+}

@@ -1,3 +1,5 @@
+package CardGame
+
 data class Card(
     var code: String,
     var image: String,

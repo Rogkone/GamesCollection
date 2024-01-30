@@ -1,3 +1,5 @@
+package CardGame
+
 class Hand {
     var cards: MutableList<Card> = mutableListOf()
 

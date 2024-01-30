@@ -1,4 +1,5 @@
-import androidx.compose.material.Text
+package CardGame
+
 import androidx.compose.runtime.*
 import kotlin.random.Random
 

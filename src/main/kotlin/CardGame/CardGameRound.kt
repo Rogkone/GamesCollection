@@ -1,3 +1,5 @@
+package CardGame
+
 class CardGameRound(var trump: Card) {
     val playedCards: MutableList<Card> = mutableListOf()
     val playedCardsHash: MutableMap<String, Card> = mutableMapOf()

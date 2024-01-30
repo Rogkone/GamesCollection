@@ -4,68 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/0S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/2S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/3S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/4S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/5S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/6S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/7S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/8S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9C.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9D.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9H.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/9S.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AD.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AH.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/AS.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JD.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JH.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/JS.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KD.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KH.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/KS.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QD.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QH.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/QS.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/Cards/back.png" afterDir="false" />
+    <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="week 2 finished, still stuff to do">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/Dice.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGame.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameRound.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DicePlayer.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceRoll.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/cardGameCompose.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dice/6.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Card.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/Card.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGame.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGame.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGameRound.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGameRound.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardImages.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardImages.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardPlayer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardPlayer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/DrawCardResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/DrawCardResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Hand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/Hand.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/AS.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/back.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,10 +61,12 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin Script" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -128,7 +95,16 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
   }
 }</component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Codersbay\Documents\Java\Github\GamesCollection2\src\main\kotlin" />
+      <recent name="C:\Users\Codersbay\Documents\Java\Github\GamesCollection2\src\main\kotlin\myCompose" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="CardGame" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.desktop">
     <configuration name="GamesCollection2 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -197,10 +173,21 @@
       <option name="presentableId" value="Default" />
       <updated>1705319180167</updated>
     </task>
+    <task id="LOCAL-00001" summary="week 2 finished, still stuff to do">
+      <option name="closed" value="true" />
+      <created>1706268399027</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706268399027</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="week 2 finished, still stuff to do" />
+    <option name="LAST_COMMIT_MESSAGE" value="week 2 finished, still stuff to do" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
