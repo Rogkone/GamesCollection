@@ -1,4 +1,6 @@
 import CardGame.*
+import DiceGame.*
+import myCompose.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,12 +11,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import java.awt.Toolkit
-import myCompose.*
 import myCompose.cardGameCompose.cardGameMain
 import myCompose.diceGameCompose.diceGameMain
-
-// TODO Farbzwang für Spieler
-// TODO AI überarbeiten
 
 val initDeck = CardGame.getNewDeckAsync()
 val deckId = initDeck!!.deckID
@@ -35,8 +33,8 @@ fun main() = application {
                 cardGameMain(remember { mutableStateOf(cardGame) })
             }
             "diceGame" -> {
-                //val diceGame by remember { mutableStateOf(DiceGame()) }
-                diceGameMain()
+                val diceGame by remember { mutableStateOf(DiceGame()) }
+                diceGameMain(remember {mutableStateOf(diceGame)})
             }
             null -> mainScreen(onGameStart = { game -> activeGame = game })
 
