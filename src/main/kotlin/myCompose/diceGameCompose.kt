@@ -6,11 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,23 +17,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 
+//TODO
+// Hintergrundfarbe für ausgefüllte Felder
+// Button formatieren
+// Nur einmal schreiben, nur neu Rollen wenn geschrieben
+//
+
 object diceGameCompose {
 
     val diceHeight = 100.dp
+
     @Composable
-    fun diceGameMain(gameState: MutableState<DiceGame>) {
+    fun diceGameMain(gameViewModel: DiceGameViewModel) {
+        val gameState by gameViewModel.gameState.collectAsState()
         Row(modifier = Modifier.fillMaxSize()) {
-            table(gameState, Modifier.weight(1f))
-            dice(gameState.value.gameRound.roll, Modifier.weight(1f))
+            table(gameViewModel, Modifier.weight(1f))
+            dice(gameViewModel, Modifier.weight(1f))
         }
     }
 
     @Composable
-    fun table(gameState: MutableState<DiceGame>, modifier: Modifier = Modifier) {
-        val game = gameState.value
-        val gameRound = game.gameRound
-        val roll = gameRound.roll
-        val pointSheet = game.gameRound.pointSheet
+    fun table(gameViewModel: DiceGameViewModel, modifier: Modifier = Modifier) {
+        // Observe gameState as state for recomposition
+        val gameState = gameViewModel.gameState.collectAsState().value
+        val roll = gameState.roll
+        val pointSheet = gameState.pointSheet
 
         val column1Weight = .1f
         val column2Weight = .1f
@@ -44,36 +51,53 @@ object diceGameCompose {
             // header
             item {
                 Row() {
-                    tableCell(text = "", weight = column1Weight)
+                    tableCell(text = "YAHTZEE", weight = column1Weight)
                     tableCell(text = "Points", weight = column2Weight)
                     tableCell(text = "How to", weight = column3Weight)
                 }
             }
             // content
-            items(pointSheet.size) { index ->
-                val entry = pointSheet.entries.toList()[index]
+            itemsIndexed(pointSheet.entries.toList()) { _, entry ->
                 Row(Modifier.fillMaxWidth()) {
                     tableCell(text = entry.key, weight = column1Weight)
-                    if (entry.key == "Bonus" || entry.key == "Upper Total" || entry.key == "Lower Total" || entry.key == "Total"){
+                    if (entry.key in listOf("Bonus", "Upper Total", "Lower Total", "Total")) {
                         tableCell(
-                            text = if (entry.value == null) roll.calcCurrentScore(entry.key).toString()
-                            else entry.value.toString(), weight = column2Weight
+                            text =  entry.value?.toString() ?:roll.calcCurrentScore(entry.key).toString(),
+                            weight = column2Weight
                         )
-                    }
-                    else {
+                    } else {
                         tableCellButton(
-                            text = if (entry.value == null) roll.calcCurrentScore(entry.key).toString()
-                            else entry.value.toString(),
+                            text = entry.value?.toString() ?: roll.calcCurrentScore(entry.key).toString(),
                             weight = column2Weight,
-                            game = gameState,
+                            gameViewModel = gameViewModel,
                             key = entry.key
                         )
                     }
-                    tableCell(text = "", weight = column3Weight)
+                    var howToText: String = ""
+                    when(entry.key) {
+                        "One" -> howToText = "Add all 1s."
+                        "Two" -> howToText = "Add all 2s."
+                        "Three" -> howToText = "Add all 3s."
+                        "Four" -> howToText = "Add all 4s."
+                        "Five" -> howToText = "Add all 5s."
+                        "Six" -> howToText = "Add all 6s."
+                        "Bonus" -> howToText = "Add 35 if upper total >= 63"
+                        "1 Pair" -> howToText = "Add total of all dice"
+                        "2 Pair" -> howToText = "Add total of all dice"
+                        "3 of a kind" -> howToText = "Add total of all dice if 3 are the same."
+                        "4 of a kind" -> howToText = "Add total of all dice if 4 are the same."
+                        "Full House" -> howToText = "Score 25 points for a full house."
+                        "Sm. Street" -> howToText = "Score 30 points for a small straight (4 sequential dice)."
+                        "Lg. Street" -> howToText = "Score 40 points for a large straight (5 sequential dice)."
+                        "Chance" -> howToText = "Add total of all dice."
+                        "Yahtzee" -> howToText = "Score 50 points for a Yahtzee (5 of a kind)."
+                    }
+                    tableCell(text = howToText, weight = column3Weight)
                 }
             }
         }
     }
+
 
     @Composable
     fun RowScope.tableCell(
@@ -89,12 +113,13 @@ object diceGameCompose {
                 .height(27.dp)
         )
     }
+
     @Composable
     fun RowScope.tableCellButton(
         text: String,
         weight: Float,
-        game:MutableState<DiceGame>,
-        key:String
+        gameViewModel: DiceGameViewModel,
+        key: String
     ) {
         Text(
             text = text,
@@ -104,14 +129,16 @@ object diceGameCompose {
                 .padding(8.dp)
                 .height(27.dp)
         )
-        Button(onClick = { game.value.gameRound.writeScore(key) }){
+        Button(onClick = { gameViewModel.writeScore(key,gameViewModel.gameState.value.roll.calcCurrentScore(key)) }) {
             Text(text = "Write")
         }
     }
 
     @Composable
-    fun dice(diceRoll: DiceRoll, modifier: Modifier = Modifier) {
-        diceRoll.dice.sortBy { it.diceValue }
+    fun dice(gameViewModel: DiceGameViewModel, modifier: Modifier = Modifier) {
+        val gameState by gameViewModel.gameState.collectAsState()
+        val diceRoll = gameState.roll
+        val sortedDice = diceRoll.dice.sortedBy { it.value }
 
         Column(
             modifier = modifier.fillMaxSize().padding(16.dp),
@@ -119,23 +146,23 @@ object diceGameCompose {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-                diceRoll.dice.forEach { die ->
+                sortedDice.forEachIndexed { index, die ->
                     Image(
-                        painterResource("Dice/${die.img}"),
+                        painter = painterResource("Dice/${die.img}"),
                         contentDescription = "",
-                        modifier = Modifier.clickable { die.toggleReRoll() }.height(height = if (!die.reRoll)diceHeight.times(1.2.toFloat()) else diceHeight ),
-
+                        modifier = Modifier
+                            .clickable { gameViewModel.toggleDiceReRoll(index) } // Use index here
+                            .height(if (!die.reRoll) diceHeight.times(1.2.toFloat()) else diceHeight),
                     )
                 }
             }
-            if (diceRoll.rollCount < 2)
-            Button(onClick = {
-                diceRoll.rollDice()
-            }) {
-                Text("Roll")
+            Button(onClick = {if (diceRoll.rollCount < 2) gameViewModel.rollDice() else gameViewModel.resetDiceOrPrepareNewGame()   }) {
+                Text(if (diceRoll.rollCount < 2) "Roll" else "New Roll")
             }
         }
 
     }
+
+
 }
 

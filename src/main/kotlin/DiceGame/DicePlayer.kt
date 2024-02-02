@@ -1,4 +1,0 @@
-package DiceGame
-
-class DicePlayer {
-}

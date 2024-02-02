@@ -3,23 +3,16 @@ package DiceGame
 import androidx.compose.runtime.mutableStateListOf
 import kotlin.random.Random
 
-class DiceRoll {
-    var dice = mutableStateListOf<Dice>()
-    var rollCount = 0
-
-    init {
-        repeat(5) {
-            dice.add(Dice(Random.nextInt(1, 7)))
+data class DiceRoll(
+    val dice: List<Dice> = List(5) { Dice(Random.nextInt(1, 7)) }.sortedBy { it.value },
+    val rollCount: Int = 0
+) {
+    fun rollDice(): DiceRoll {
+        if (rollCount >= 2) {
+            return this
         }
-    }
-
-    fun rollDice() {
-        dice.indices.forEach { index ->
-            if (dice[index].reRoll) {
-                dice[index] = Dice(Random.nextInt(1, 7))
-            }
-        }
-        rollCount++
+        val newDice = dice.map { if (it.reRoll) Dice(Random.nextInt(1, 7)) else it }.sortedBy { it.value }
+        return this.copy(dice = newDice, rollCount = rollCount + 1)
     }
 
     fun calcCurrentScore(key: String): Int {

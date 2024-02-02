@@ -1,13 +1,14 @@
 package DiceGame
 
-class Dice (var diceValue:Int) {
+data class Dice(
+    val value: Int,
+    val reRoll: Boolean = true
+) {
+    val img: String get() = "$value.png"
 
-    var value: Int = diceValue
-    var img:String = "${value}.png"
-    var reRoll: Boolean = true
-
-    fun toggleReRoll(){
-        reRoll = !reRoll
+    fun toggleReRoll(): Dice {
+        return this.copy(reRoll = !reRoll)
     }
 }
+
 

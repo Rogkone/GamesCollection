@@ -33,8 +33,8 @@ fun main() = application {
                 cardGameMain(remember { mutableStateOf(cardGame) })
             }
             "diceGame" -> {
-                val diceGame by remember { mutableStateOf(DiceGame()) }
-                diceGameMain(remember {mutableStateOf(diceGame)})
+                val diceGameViewModel = remember { DiceGameViewModel() }
+                diceGameMain(diceGameViewModel)
             }
             null -> mainScreen(onGameStart = { game -> activeGame = game })
 
