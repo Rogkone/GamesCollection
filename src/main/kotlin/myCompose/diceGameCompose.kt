@@ -1,27 +1,27 @@
 package myCompose
 
 import DiceGame.*
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-
+import androidx.compose.ui.unit.sp
 
 //TODO
-// Hintergrundfarbe für ausgefüllte Felder
-// Button formatieren
-// Nur einmal schreiben, nur neu Rollen wenn geschrieben
-//
+
 
 object diceGameCompose {
 
@@ -29,7 +29,8 @@ object diceGameCompose {
 
     @Composable
     fun diceGameMain(gameViewModel: DiceGameViewModel) {
-        val gameState by gameViewModel.gameState.collectAsState()
+
+
         Row(modifier = Modifier.fillMaxSize()) {
             table(gameViewModel, Modifier.weight(1f))
             dice(gameViewModel, Modifier.weight(1f))
@@ -38,7 +39,6 @@ object diceGameCompose {
 
     @Composable
     fun table(gameViewModel: DiceGameViewModel, modifier: Modifier = Modifier) {
-        // Observe gameState as state for recomposition
         val gameState = gameViewModel.gameState.collectAsState().value
         val roll = gameState.roll
         val pointSheet = gameState.pointSheet
@@ -57,24 +57,24 @@ object diceGameCompose {
                 }
             }
             // content
-            itemsIndexed(pointSheet.entries.toList()) { _, entry ->
+            itemsIndexed(pointSheet.scores.entries.toList()) { _, entry ->
                 Row(Modifier.fillMaxWidth()) {
                     tableCell(text = entry.key, weight = column1Weight)
-                    if (entry.key in listOf("Bonus", "Upper Total", "Lower Total", "Total")) {
+                    if (entry.key in listOf("Bonus", "Upper Total", "Lower Total", "Total", "Upper Sum")) {
                         tableCell(
-                            text =  entry.value?.toString() ?:roll.calcCurrentScore(entry.key).toString(),
+                            text = entry.value?.toString() ?: roll.calcCurrentScore(entry.key).toString(),
                             weight = column2Weight
                         )
                     } else {
-                        tableCellButton(
+                        tableCellClickable(
                             text = entry.value?.toString() ?: roll.calcCurrentScore(entry.key).toString(),
                             weight = column2Weight,
                             gameViewModel = gameViewModel,
                             key = entry.key
                         )
                     }
-                    var howToText: String = ""
-                    when(entry.key) {
+                    var howToText = ""
+                    when (entry.key) {
                         "One" -> howToText = "Add all 1s."
                         "Two" -> howToText = "Add all 2s."
                         "Three" -> howToText = "Add all 3s."
@@ -82,8 +82,8 @@ object diceGameCompose {
                         "Five" -> howToText = "Add all 5s."
                         "Six" -> howToText = "Add all 6s."
                         "Bonus" -> howToText = "Add 35 if upper total >= 63"
-                        "1 Pair" -> howToText = "Add total of all dice"
-                        "2 Pair" -> howToText = "Add total of all dice"
+                        "1 Pair" -> howToText = "Add total of all dice if 2 are the same"
+                        "2 Pair" -> howToText = "Add total of all dice if 2 sets of 2 are the same"
                         "3 of a kind" -> howToText = "Add total of all dice if 3 are the same."
                         "4 of a kind" -> howToText = "Add total of all dice if 4 are the same."
                         "Full House" -> howToText = "Score 25 points for a full house."
@@ -110,27 +110,35 @@ object diceGameCompose {
                 .border(1.dp, Color.Black)
                 .weight(weight)
                 .padding(8.dp)
-                .height(27.dp)
+                .height(25.dp)
         )
     }
 
     @Composable
-    fun RowScope.tableCellButton(
+    fun RowScope.tableCellClickable(
         text: String,
         weight: Float,
         gameViewModel: DiceGameViewModel,
         key: String
     ) {
-        Text(
-            text = text,
+        val round = gameViewModel.gameState.value
+        Row(
             Modifier
+                .background(if (round.pointSheet.scores[key] != null) Color.Green else Color.White, RectangleShape)
+                .clickable {
+                    if (round.allowedToWrite && round.pointSheet.scores[key] == null) {
+                        gameViewModel.writeScore(key, gameViewModel.gameState.value.roll.calcCurrentScore(key))
+                        round.allowedToWrite = false
+                    } else {
+                    } //error msg
+                }
                 .border(1.dp, Color.Black)
                 .weight(weight)
                 .padding(8.dp)
-                .height(27.dp)
-        )
-        Button(onClick = { gameViewModel.writeScore(key,gameViewModel.gameState.value.roll.calcCurrentScore(key)) }) {
-            Text(text = "Write")
+                .height(25.dp)
+                .fillMaxSize()
+        ) {
+            Text(text)
         }
     }
 
@@ -156,11 +164,63 @@ object diceGameCompose {
                     )
                 }
             }
-            Button(onClick = {if (diceRoll.rollCount < 2) gameViewModel.rollDice() else gameViewModel.resetDiceOrPrepareNewGame()   }) {
-                Text(if (diceRoll.rollCount < 2) "Roll" else "New Roll")
+            Button(onClick = {
+                if (diceRoll.rollCount < 2 && gameState.allowedToWrite) gameViewModel.rollDice()
+                else if (gameState.isGameComplete()) gameViewModel.setShowDialog(true)
+                else gameViewModel.resetDiceOrPrepareNewGame()
+            },
+                modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape),
+                shape = CircleShape,
+                ) {
+                Text(
+                    if (diceRoll.rollCount < 2 && gameState.allowedToWrite) "Roll"
+                    else if (gameState.isGameComplete()) "Save Data"
+                    else "New Roll",
+                    fontSize = 50.sp)
             }
         }
+        NameInputDialog(gameViewModel)
+    }
 
+
+    @Composable
+    fun NameInputDialog(gameViewModel: DiceGameViewModel) {
+        val showDialog = gameViewModel.showDialog.collectAsState()
+        val userName = gameViewModel.userName.collectAsState()
+
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {
+                    gameViewModel.setShowDialog(false)
+                },
+                title = {
+                    Text(text = "Enter Your Name:")
+                },
+                text = {
+                    TextField(
+                        value = userName.value,
+                        onValueChange = { newValue ->
+                            gameViewModel.setUserName(newValue)
+                        },
+                        label = { Text("Name") }
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            gameViewModel.setShowDialog(false)
+                            CBCalls.insertData(gameViewModel)
+                            gameViewModel.resetDiceOrPrepareNewGame()
+                        }
+                    ) {
+                        Text("OK")
+                    }
+                },
+            )
+
+            //CBCall
+
+        }
     }
 
 

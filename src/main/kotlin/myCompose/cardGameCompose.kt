@@ -153,131 +153,131 @@ object cardGameCompose {
             }
         }
     }
-}
 
 
-@Composable
-fun printPlayerHands(game: CardGame) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(minOf(playerCount / 2, 3)), modifier = Modifier.fillMaxWidth()
-    ) {
-        items(game.players.size) { index ->
-            Row(
-                modifier = Modifier.height(250.dp).width(100.dp), horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                printSingleHand(game.players[index])
-            }
-        }
-    }
-}
-
-@Composable
-fun printPlayedCards(playedCards: MutableMap<String, Card>) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        for (card in playedCards) {
-            Column {
-                Text(card.key)
-                Image(
-                    painterResource("Cards/${card.value.code}.png"),
-                    contentDescription = "",
-                    modifier = Modifier.height(cardHeight)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun printSingleHand(player: CardPlayer) {
-    Column {
-        Text("${player.name}'s CardGame.Hand:")
-        Row {
-            player.hand.cards.forEachIndexed { index, card ->
-                val active = index == player.selectedCardIndex
-                if (player.isAI) Image(
-                    painterResource("Cards/back.png"), contentDescription = "", modifier = Modifier.height(cardHeight)
-                )
-                else {
-                    Image(painterResource("Cards/${card.code}.png"),
-                        contentDescription = "",
-                        modifier = Modifier.height(height = if (active) cardHeight.times(1.2.toFloat()) else cardHeight)
-                            .clickable { player.selectedCardIndex = index })
+    @Composable
+    fun printPlayerHands(game: CardGame) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(minOf(playerCount / 2, 3)), modifier = Modifier.fillMaxWidth()
+        ) {
+            items(game.players.size) { index ->
+                Row(
+                    modifier = Modifier.height(250.dp).width(100.dp), horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    printSingleHand(game.players[index])
                 }
             }
         }
     }
-}
 
-@Composable
-fun printTrumpCard(game: CardGame) {
-    Column {
-        Text("Trump")
-        Image(
-            painterResource("Cards/${game.trumpCard.code}.png"),
-            contentDescription = "",
-            modifier = Modifier.height(cardHeight)
-        )
-    }
-}
-
-@Composable
-fun printScoreboard(game: CardGame) {
-    var totalScore = 0
-    Row {
-        Column(
-            modifier = Modifier.padding(bottom = 16.dp)
+    @Composable
+    fun printPlayedCards(playedCards: MutableMap<String, Card>) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(game.trumpCard.suit)
-            for (player in game.players) {
-                Text("${player.name} - ${player.score}")
-                totalScore += player.score
+            for (card in playedCards) {
+                Column {
+                    Text(card.key)
+                    Image(
+                        painterResource("Cards/${card.value.code}.png"),
+                        contentDescription = "",
+                        modifier = Modifier.height(cardHeight)
+                    )
+                }
             }
         }
     }
-}
 
-@Composable
-fun errorDialog(message: String, onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = { onDismiss() }, title = {
-        Text(text = "Error")
-    }, text = {
-        Text(text = message)
-    }, confirmButton = {
-        Button(onClick = {
-            onDismiss()
-        }) {
-            Text(text = "OK")
-        }
-    }, properties = DialogProperties()
-    )
-}
-
-
-fun getNextAction(gameState: MutableState<CardGame>) {
-    if (gameState.value.playedRounds == cardCount) {
-        DrawCardResponse.shuffelDeck(deckId)
-        trickString = ""
-        gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
-    } else {
-        if (gameState.value.gameRound.playedCards.size == gameState.value.players.size) {
-            trickString = gameState.value.endRound()
-        }
-        else gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
-    }
-}
-
-
-@Composable
-@Preview
-fun playerHands(game: CardGame) {
-    MaterialTheme {
-        Column(
-            modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            printPlayerHands(game)
+    @Composable
+    fun printSingleHand(player: CardPlayer) {
+        Column {
+            Text("${player.name}'s CardGame.Hand:")
+            Row {
+                player.hand.cards.forEachIndexed { index, card ->
+                    val active = index == player.selectedCardIndex
+                    if (player.isAI) Image(
+                        painterResource("Cards/back.png"),
+                        contentDescription = "",
+                        modifier = Modifier.height(cardHeight)
+                    )
+                    else {
+                        Image(painterResource("Cards/${card.code}.png"),
+                            contentDescription = "",
+                            modifier = Modifier.height(height = if (active) cardHeight.times(1.2.toFloat()) else cardHeight)
+                                .clickable { player.selectedCardIndex = index })
+                    }
+                }
+            }
         }
     }
-}
 
+    @Composable
+    fun printTrumpCard(game: CardGame) {
+        Column {
+            Text("Trump")
+            Image(
+                painterResource("Cards/${game.trumpCard.code}.png"),
+                contentDescription = "",
+                modifier = Modifier.height(cardHeight)
+            )
+        }
+    }
+
+    @Composable
+    fun printScoreboard(game: CardGame) {
+        var totalScore = 0
+        Row {
+            Column(
+                modifier = Modifier.padding(bottom = 16.dp)
+            ) {
+                Text(game.trumpCard.suit)
+                for (player in game.players) {
+                    Text("${player.name} - ${player.score}")
+                    totalScore += player.score
+                }
+            }
+        }
+    }
+
+
+    fun getNextAction(gameState: MutableState<CardGame>) {
+        if (gameState.value.playedRounds == cardCount) {
+            DrawCardResponse.shuffelDeck(deckId)
+            trickString = ""
+            gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
+        } else {
+            if (gameState.value.gameRound.playedCards.size == gameState.value.players.size) {
+                trickString = gameState.value.endRound()
+            } else gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
+        }
+    }
+
+
+    @Composable
+    @Preview
+    fun playerHands(game: CardGame) {
+        MaterialTheme {
+            Column(
+                modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                printPlayerHands(game)
+            }
+        }
+    }
+
+    @Composable
+    fun errorDialog(message: String, onDismiss: () -> Unit) {
+        AlertDialog(onDismissRequest = { onDismiss() }, title = {
+            Text(text = "Error")
+        }, text = {
+            Text(text = message)
+        }, confirmButton = {
+            Button(onClick = {
+                onDismiss()
+            }) {
+                Text(text = "OK")
+            }
+        }, properties = DialogProperties()
+        )
+    }
+}

@@ -1,14 +1,15 @@
 import CardGame.*
 import DiceGame.*
-import myCompose.*
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
 import java.awt.Toolkit
 import myCompose.cardGameCompose.cardGameMain
@@ -32,7 +33,7 @@ fun main() = application {
                 val cardGame by remember { mutableStateOf(CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)) }
                 cardGameMain(remember { mutableStateOf(cardGame) })
             }
-            "diceGame" -> {
+            "DiceGame" -> {
                 val diceGameViewModel = remember { DiceGameViewModel() }
                 diceGameMain(diceGameViewModel)
             }
@@ -50,11 +51,16 @@ fun mainScreen(onGameStart: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Button(onClick = { onGameStart("cardGame") }) {
-            Text("Card Game")
+        Button(
+            onClick = { onGameStart("cardGame") },
+            modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape)) {
+            Text("Card Game",fontSize = 50.sp)
         }
-        Button(onClick = { onGameStart("diceGame") }) {
-            Text("Dice Game")
+        Spacer(modifier = Modifier.height(25.dp))
+        Button(
+            onClick = { onGameStart("DiceGame") },
+            modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape)) {
+            Text("Dice Game",fontSize = 50.sp)
         }
     }
 }
