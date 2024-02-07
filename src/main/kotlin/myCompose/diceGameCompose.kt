@@ -17,23 +17,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-//TODO
-
 
 object diceGameCompose {
 
     val diceHeight = 100.dp
 
     @Composable
-    fun diceGameMain(gameViewModel: DiceGameViewModel) {
+    fun diceGameMain(gameViewModel: DiceGameViewModel, onBack: () -> Unit) {
 
 
-        Row(modifier = Modifier.fillMaxSize()) {
-            table(gameViewModel, Modifier.weight(1f))
-            dice(gameViewModel, Modifier.weight(1f))
+        Column(modifier = Modifier.fillMaxSize()){
+            Row(modifier = Modifier.weight(1f)) {
+                table(gameViewModel, Modifier.weight(1f))
+                dice(gameViewModel, Modifier.weight(1f))
+            }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Button(onClick = onBack, modifier = Modifier.padding(16.dp)) {
+                    Text("Back to Main")
+                }
+            }
         }
     }
 
@@ -42,6 +47,7 @@ object diceGameCompose {
         val gameState = gameViewModel.gameState.collectAsState().value
         val roll = gameState.roll
         val pointSheet = gameState.pointSheet
+        val fatList: List<String> = listOf("Upper Sum", "Bonus", "Upper Total", "Lower Total", "Total", "Upper Sum")
 
         val column1Weight = .1f
         val column2Weight = .1f
@@ -59,11 +65,12 @@ object diceGameCompose {
             // content
             itemsIndexed(pointSheet.scores.entries.toList()) { _, entry ->
                 Row(Modifier.fillMaxWidth()) {
-                    tableCell(text = entry.key, weight = column1Weight)
-                    if (entry.key in listOf("Bonus", "Upper Total", "Lower Total", "Total", "Upper Sum")) {
+                    tableCell(text = entry.key, weight = column1Weight, borderWeight = if (entry.key in fatList) 2.dp else 1.dp)
+                    if (entry.key in fatList) {
                         tableCell(
                             text = entry.value?.toString() ?: roll.calcCurrentScore(entry.key).toString(),
-                            weight = column2Weight
+                            weight = column2Weight,
+                            borderWeight = 2.dp
                         )
                     } else {
                         tableCellClickable(
@@ -92,7 +99,7 @@ object diceGameCompose {
                         "Chance" -> howToText = "Add total of all dice."
                         "Yahtzee" -> howToText = "Score 50 points for a Yahtzee (5 of a kind)."
                     }
-                    tableCell(text = howToText, weight = column3Weight)
+                    tableCell(text = howToText, weight = column3Weight, borderWeight = if (entry.key in fatList) 2.dp else 1.dp)
                 }
             }
         }
@@ -103,11 +110,12 @@ object diceGameCompose {
     fun RowScope.tableCell(
         text: String,
         weight: Float,
+        borderWeight: Dp = 1.dp
     ) {
         Text(
             text = text,
             Modifier
-                .border(1.dp, Color.Black)
+                .border(borderWeight, Color.Black)
                 .weight(weight)
                 .padding(8.dp)
                 .height(25.dp)
@@ -129,8 +137,8 @@ object diceGameCompose {
                     if (round.allowedToWrite && round.pointSheet.scores[key] == null) {
                         gameViewModel.writeScore(key, gameViewModel.gameState.value.roll.calcCurrentScore(key))
                         round.allowedToWrite = false
-                    } else {
-                    } //error msg
+                    }
+                // else error msg
                 }
                 .border(1.dp, Color.Black)
                 .weight(weight)

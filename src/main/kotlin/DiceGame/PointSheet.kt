@@ -1,5 +1,8 @@
 package DiceGame
 
+import kotlinx.serialization.Serializable
+
+
 data class PointSheet (
     val scores: MutableMap<String, Int?> = mutableMapOf(
         "One" to null,
@@ -22,7 +25,9 @@ data class PointSheet (
         "Yahtzee" to null,
         "Lower Total" to 0,
         "Total" to 0
-    ))
+    ),
+    val name: String = "",
+    val date: String = "")
 {
 
     fun withUpdatedScores(updates: Map<String, Int?>): PointSheet {

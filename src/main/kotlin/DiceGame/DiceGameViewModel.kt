@@ -17,11 +17,12 @@ class DiceGameViewModel {
     fun setShowDialog(show: Boolean) {
         _showDialog.value = show
     }
+
     fun setUserName(name: String) {
         _userName.value = name
     }
 
-    fun writeScore(key: String, score: Int) {
+    fun writeScore_old(key: String, score: Int) {
         val currentGameRound = _gameState.value
         if (currentGameRound.allowedToWrite) {
             val updatedGameRound = currentGameRound.writeScore(key, score).calcTotals()
@@ -29,6 +30,20 @@ class DiceGameViewModel {
         }
         //else error
     }
+
+    fun writeScore(key: String, score: Int) {
+        val currentGameRound = _gameState.value
+        if (currentGameRound.allowedToWrite) {
+            val updatedScores = currentGameRound.pointSheet.scores.toMutableMap().apply {
+                this[key] = score
+            }
+            val updatedPointSheet = currentGameRound.pointSheet.copy(scores = updatedScores)
+            val updatedGameRound = currentGameRound.copy(pointSheet = updatedPointSheet, allowedToWrite = false).calcTotals()
+
+            _gameState.value = updatedGameRound
+        }
+    }
+
 
     fun rollDice() {
         val currentState = _gameState.value
@@ -42,13 +57,10 @@ class DiceGameViewModel {
 
     fun resetDiceOrPrepareNewGame() {
         if (_gameState.value.isGameComplete()) {
-            // enter name
-            // write to db
             _gameState.value = DiceGameRound()
-        }  else if (_gameState.value.roll.rollCount >= 2 && _gameState.value.allowedToWrite) {
+        } else if (_gameState.value.roll.rollCount >= 2 && _gameState.value.allowedToWrite) {
             println("You must write a score before rolling again.")
-        }
-        else {
+        } else {
             val newRoll = DiceRoll()
             _gameState.value = _gameState.value.copy(roll = newRoll, allowedToWrite = true)
         }

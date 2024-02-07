@@ -23,6 +23,6 @@ data class DiceGameRound(
     }
 
     fun isGameComplete(): Boolean {
-        return pointSheet.scores.filterKeys { it !in listOf("Bonus", "Upper Total", "Lower Total", "Total") }.all { it.value != null }
+        return pointSheet.scores.filterKeys { it !in listOf("Upper Sum", "Bonus", "Upper Total", "Lower Total", "Total") }.all { it.value != null }
     }
 }

@@ -3,6 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     kotlin("jvm") version "1.9.21"
     id("org.jetbrains.compose") version "1.5.11"
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 group = "com.gamescol"
@@ -38,6 +39,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0-RC2")
     implementation("org.jetbrains.skiko:skiko-awt-runtime-windows-x64:0.7.9")
     implementation("com.couchbase.client:kotlin-client:1.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
 }
 
 

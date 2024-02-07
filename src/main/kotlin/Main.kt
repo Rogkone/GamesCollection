@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -14,6 +15,7 @@ import androidx.compose.ui.window.*
 import java.awt.Toolkit
 import myCompose.cardGameCompose.cardGameMain
 import myCompose.diceGameCompose.diceGameMain
+import myCompose.diceHighScores
 
 val initDeck = CardGame.getNewDeckAsync()
 val deckId = initDeck!!.deckID
@@ -35,7 +37,10 @@ fun main() = application {
             }
             "DiceGame" -> {
                 val diceGameViewModel = remember { DiceGameViewModel() }
-                diceGameMain(diceGameViewModel)
+                diceGameMain(diceGameViewModel) { activeGame = null }
+            }
+            "Dice Highscores" -> {
+                diceHighScores.mainHighScore { activeGame = null }
             }
             null -> mainScreen(onGameStart = { game -> activeGame = game })
 
@@ -53,14 +58,20 @@ fun mainScreen(onGameStart: (String) -> Unit) {
     ){
         Button(
             onClick = { onGameStart("cardGame") },
-            modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape)) {
+            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
             Text("Card Game",fontSize = 50.sp)
         }
         Spacer(modifier = Modifier.height(25.dp))
         Button(
             onClick = { onGameStart("DiceGame") },
-            modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape)) {
+            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
             Text("Dice Game",fontSize = 50.sp)
+        }
+        Spacer(modifier = Modifier.height(25.dp))
+        Button(
+            onClick = { onGameStart("Dice Highscores") },
+            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
+            Text("Dice Highscores",fontSize = 50.sp, textAlign = TextAlign.Center)
         }
     }
 }
@@ -68,8 +79,8 @@ fun mainScreen(onGameStart: (String) -> Unit) {
 @Composable
 fun stateMainWindow(): WindowState {
     val screenSize = Toolkit.getDefaultToolkit().screenSize
-    val windowHeight = screenSize.height / 1.5
-    val windowWidth = screenSize.width / 1.5
+    val windowHeight = screenSize.height / 1.3
+    val windowWidth = screenSize.width / 1.3
     val windowSize = DpSize(windowWidth.dp, windowHeight.dp)
     return rememberWindowState(
         size = windowSize,
