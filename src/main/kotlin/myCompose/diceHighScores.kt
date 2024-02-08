@@ -23,7 +23,6 @@ object diceHighScores {
 
     @Composable
     fun table(onBack: () -> Unit) {
-
         val highScores: List<PointSheet> = CBCalls.getHighScores()
         val scoreKeys = highScores.firstOrNull()?.scores?.keys ?: emptySet()
 

@@ -9,9 +9,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration.Companion.milliseconds
 
-//QUERY for 5 highest
-//SELECT a.* FROM default:`dice-game-test` a ORDER BY a.`total` DESC LIMIT 5
-
 object CBCalls {
     fun insertData(gameViewModel: DiceGameViewModel) {
         val cluster = Cluster.connect(
@@ -73,7 +70,7 @@ object CBCalls {
         try {
             runBlocking {
                 val queryResult = cluster
-                    .query("SELECT a.* FROM default:`dice-game-test` a ORDER BY a.`total` DESC LIMIT 5")
+                    .query("SELECT a.* FROM default:`dice-game-test` a ORDER BY a.`total` DESC LIMIT 8")
                     .execute()
                 queryResult.rows.forEach { row ->
                     val jsonString = String(row.content, Charset.defaultCharset())

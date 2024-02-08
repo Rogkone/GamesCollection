@@ -22,15 +22,6 @@ class DiceGameViewModel {
         _userName.value = name
     }
 
-    fun writeScore_old(key: String, score: Int) {
-        val currentGameRound = _gameState.value
-        if (currentGameRound.allowedToWrite) {
-            val updatedGameRound = currentGameRound.writeScore(key, score).calcTotals()
-            _gameState.value = updatedGameRound.copy(allowedToWrite = false)
-        }
-        //else error
-    }
-
     fun writeScore(key: String, score: Int) {
         val currentGameRound = _gameState.value
         if (currentGameRound.allowedToWrite) {
@@ -44,7 +35,6 @@ class DiceGameViewModel {
         }
     }
 
-
     fun rollDice() {
         val currentState = _gameState.value
         if (currentState.roll.rollCount < 2) {
@@ -53,7 +43,6 @@ class DiceGameViewModel {
         }
 
     }
-
 
     fun resetDiceOrPrepareNewGame() {
         if (_gameState.value.isGameComplete()) {
@@ -65,7 +54,6 @@ class DiceGameViewModel {
             _gameState.value = _gameState.value.copy(roll = newRoll, allowedToWrite = true)
         }
     }
-
 
     fun toggleDiceReRoll(index: Int) {
         val currentRoll = _gameState.value.roll

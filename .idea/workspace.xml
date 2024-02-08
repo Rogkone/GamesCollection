@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="week 2 finished, still stuff to do">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/PointSheetJson.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceHighScores.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/CBCalls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/CBCalls.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameRound.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameRound.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceRoll.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceRoll.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/PointSheet.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/PointSheet.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceHighScores.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceHighScores.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

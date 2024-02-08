@@ -4,7 +4,8 @@ import kotlin.random.Random
 
 data class DiceRoll(
     val dice: List<Dice> = List(5) { Dice(Random.nextInt(1, 7)) }.sortedBy { it.value },
-    val rollCount: Int = 0
+    val rollCount: Int = 0,
+
 ) {
     fun rollDice(): DiceRoll {
         if (rollCount > 2) {
@@ -110,6 +111,4 @@ data class DiceRoll(
     fun isYahtzee(): Boolean {
         return (dice[0].value == dice[1].value && dice[0].value == dice[2].value && dice[0].value == dice[3].value && dice[0].value == dice[4].value)
     }
-
-
 }

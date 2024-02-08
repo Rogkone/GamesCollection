@@ -28,7 +28,6 @@ object diceGameCompose {
     @Composable
     fun diceGameMain(gameViewModel: DiceGameViewModel, onBack: () -> Unit) {
 
-
         Column(modifier = Modifier.fillMaxSize()){
             Row(modifier = Modifier.weight(1f)) {
                 table(gameViewModel, Modifier.weight(1f))
@@ -48,7 +47,6 @@ object diceGameCompose {
         val roll = gameState.roll
         val pointSheet = gameState.pointSheet
         val fatList: List<String> = listOf("Upper Sum", "Bonus", "Upper Total", "Lower Total", "Total", "Upper Sum")
-
         val column1Weight = .1f
         val column2Weight = .1f
         val column3Weight = .2f
@@ -104,7 +102,6 @@ object diceGameCompose {
             }
         }
     }
-
 
     @Composable
     fun RowScope.tableCell(
@@ -190,7 +187,6 @@ object diceGameCompose {
         NameInputDialog(gameViewModel)
     }
 
-
     @Composable
     fun NameInputDialog(gameViewModel: DiceGameViewModel) {
         val showDialog = gameViewModel.showDialog.collectAsState()
@@ -225,12 +221,7 @@ object diceGameCompose {
                     }
                 },
             )
-
-            //CBCall
-
         }
     }
-
-
 }
 
