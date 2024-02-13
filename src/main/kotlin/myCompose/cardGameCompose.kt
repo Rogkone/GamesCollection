@@ -1,8 +1,7 @@
 package myCompose
 
 import CardGame.*
-import CardGame.DrawCardResponse
-import androidx.compose.desktop.ui.tooling.preview.Preview
+import DiceGame.DiceGameViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,60 +16,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.sp
+import java.awt.Toolkit
 
-import cardCount
-import cardHeight
-import deckId
-import deckSize
-import numberOfHumans
-import playerCount
+
 import stateMainWindow
-import trickString
 
 // TODO Farbzwang für Spieler
 // TODO AI überarbeiten
 
 object cardGameCompose {
+    val cardHeight = (Toolkit.getDefaultToolkit().screenSize.height / 10).dp
 
     @Composable
-    fun cardGameMain(gameState: MutableState<CardGame>) {
-        var showErrorDialog by remember { mutableStateOf(false) }
-        var winnerText = ""
-        var playedCards by mutableStateOf(gameState.value.gameRound.playedCardsHash)
-        var nextButtonText by remember { mutableStateOf(if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) "Next" else "play selected card") }
-        var currentPlayerName by remember { mutableStateOf(gameState.value.players[gameState.value.currentPlayerIndex].name) }
-        if (gameState.value.playedRounds == cardCount) {
-            winnerText = (gameState.value.getWinner(gameState.value.players))
-        }
-        if (showErrorDialog) {
-            errorDialog(message = "Please choose a card", onDismiss = {
-                showErrorDialog = false
-            })
-        }
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+    fun cardGameMain(gameViewModel: CardGameViewModel, onBack: () -> Unit) {
+        val gameState = gameViewModel.gameState
 
-            ) {
-                playedCards = gameState.value.gameRound.playedCardsHash
-                printPlayedCards(playedCards)
-            }
+        if (gameState.value.playedRounds == gameViewModel.cardCount) {
+            gameViewModel.setWinnerText(gameState.value.getWinner(gameState.value.players))
         }
-        playerHands(gameState.value)
+
+
+
+        playedCards(gameViewModel)
+        playerHands(gameViewModel)
+        infoBoard(gameViewModel, onBack)
+        selectCardDialog(gameViewModel)
+    }
+
+    @Composable
+    fun infoBoard(gameViewModel: CardGameViewModel, onBack: () -> Unit) {
+        val gameState by gameViewModel.gameState.collectAsState()
+        val currentPlayerName by gameViewModel.currentPlayerName.collectAsState()
+        val winnerText by gameViewModel.winnerText.collectAsState()
+        val nextButtonText by gameViewModel.nextButtonText.collectAsState()
+
         MaterialTheme {
             Column(
-                modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (gameState.value.gameRound.playedCards.size != playerCount) Text("$currentPlayerName has to play!")
-                else Text("")
+                Text(if (gameState.gameRound.playedCards.size != gameViewModel.playerCount) "$currentPlayerName has to play!" else "")
+
                 Spacer(modifier = Modifier.height((stateMainWindow().size.height / 8) * 5))
                 Text(winnerText)
                 Spacer(modifier = Modifier.height(32.dp))
-                Text(trickString)
+                Text(gameViewModel.trickString)
                 Spacer(modifier = Modifier.height(32.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -88,7 +81,7 @@ object cardGameCompose {
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                printTrumpCard(gameState.value)
+                                trumpCard(gameViewModel)
                             }
                         }
                         Box(
@@ -100,7 +93,7 @@ object cardGameCompose {
                                 horizontalAlignment = Alignment.CenterHorizontally
 
                             ) {
-                                printScoreboard(gameState.value)
+                                scoreboard(gameViewModel)
                             }
                         }
                         Box(
@@ -112,39 +105,27 @@ object cardGameCompose {
                                 horizontalAlignment = Alignment.CenterHorizontally
 
                             ) {
-                                Button(onClick = {
-                                    var gameOverTest by mutableStateOf(false)
-                                    if (gameState.value.isGameOver()) {
-                                        getNextAction(gameState)
-                                        gameOverTest = true
-                                    }
-                                    if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
-                                        getNextAction(gameState)
-                                        gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex =
-                                            -1
-                                    } else {
-                                        if (gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex == -1 && gameState.value.gameRound.playedCards.size != gameState.value.players.size) {
-                                            showErrorDialog = true //if no card chosen
-                                        } else {
-                                            getNextAction(gameState)
-                                            gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex =
-                                                -1
-                                        }
-                                    }
-                                    if (gameState.value.gameRound.playedCards.size == playerCount) {
-                                        nextButtonText = "Show Winner"
-                                    } else if (gameOverTest) {
-                                        nextButtonText = "Next Round"
-                                        gameOverTest = false
-                                    } else if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
-                                        nextButtonText = "Next Player"
-                                    } else {
-                                        nextButtonText = "Play selected card!"
-                                    }
-                                    playedCards = gameState.value.gameRound.playedCardsHash
-                                    currentPlayerName = gameState.value.players[gameState.value.currentPlayerIndex].name
-                                }) {
-                                    Text(nextButtonText)
+                                Button(
+                                    onClick = { gameViewModel.handleNextAction() },
+                                    modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+                                ) {
+                                    Text(nextButtonText, fontSize = 50.sp)
+                                }
+                            }
+                        }
+                        Box(
+                            modifier = Modifier.fillMaxWidth().weight(1f)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Button(
+                                    onClick = onBack,
+                                    modifier = Modifier.padding(16.dp).height(75.dp).width(200.dp).clip(CircleShape)
+                                ) {
+                                    Text("Back to Main", fontSize = 25.sp)
                                 }
                             }
                         }
@@ -154,42 +135,61 @@ object cardGameCompose {
         }
     }
 
-
     @Composable
-    fun printPlayerHands(game: CardGame) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(minOf(playerCount / 2, 3)), modifier = Modifier.fillMaxWidth()
-        ) {
-            items(game.players.size) { index ->
-                Row(
-                    modifier = Modifier.height(250.dp).width(100.dp), horizontalArrangement = Arrangement.SpaceEvenly
+    fun playerHands(gameViewModel: CardGameViewModel) {
+        MaterialTheme {
+            Column(
+                modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(minOf(gameViewModel.playerCount / 2, 3)),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    printSingleHand(game.players[index])
+                    items(gameViewModel.gameState.value.players.size) { index ->
+                        Row(
+                            modifier = Modifier.height(250.dp).width(100.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            singleHand(gameViewModel.gameState.value.players[index])
+                        }
+                    }
                 }
             }
         }
     }
 
     @Composable
-    fun printPlayedCards(playedCards: MutableMap<String, Card>) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly
+    fun playedCards(gameViewModel: CardGameViewModel) {
+        val playedCards = gameViewModel.gameState.value.gameRound.playedCardsHash
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            for (card in playedCards) {
-                Column {
-                    Text(card.key)
-                    Image(
-                        painterResource("Cards/${card.value.code}.png"),
-                        contentDescription = "",
-                        modifier = Modifier.height(cardHeight)
-                    )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    for (card in playedCards) {
+                        Column {
+                            Text(card.key)
+                            Image(
+                                painterResource("Cards/${card.value.code}.png"),
+                                contentDescription = "",
+                                modifier = Modifier.height(cardHeight)
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 
     @Composable
-    fun printSingleHand(player: CardPlayer) {
+    fun singleHand(player: CardPlayer) {
         Column {
             Text("${player.name}'s CardGame.Hand:")
             Row {
@@ -212,11 +212,11 @@ object cardGameCompose {
     }
 
     @Composable
-    fun printTrumpCard(game: CardGame) {
+    fun trumpCard(gameViewModel: CardGameViewModel) {
         Column {
             Text("Trump")
             Image(
-                painterResource("Cards/${game.trumpCard.code}.png"),
+                painterResource("Cards/${gameViewModel.gameState.value.trumpCard.code}.png"),
                 contentDescription = "",
                 modifier = Modifier.height(cardHeight)
             )
@@ -224,14 +224,14 @@ object cardGameCompose {
     }
 
     @Composable
-    fun printScoreboard(game: CardGame) {
+    fun scoreboard(gameViewModel: CardGameViewModel) {
         var totalScore = 0
         Row {
             Column(
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
-                Text(game.trumpCard.suit)
-                for (player in game.players) {
+                Text(gameViewModel.gameState.value.trumpCard.suit)
+                for (player in gameViewModel.gameState.value.players) {
                     Text("${player.name} - ${player.score}")
                     totalScore += player.score
                 }
@@ -239,45 +239,15 @@ object cardGameCompose {
         }
     }
 
-
-    fun getNextAction(gameState: MutableState<CardGame>) {
-        if (gameState.value.playedRounds == cardCount) {
-            DrawCardResponse.shuffelDeck(deckId)
-            trickString = ""
-            gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
-        } else {
-            if (gameState.value.gameRound.playedCards.size == gameState.value.players.size) {
-                trickString = gameState.value.endRound()
-            } else gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
-        }
-    }
-
-
     @Composable
-    @Preview
-    fun playerHands(game: CardGame) {
-        MaterialTheme {
-            Column(
-                modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                printPlayerHands(game)
-            }
+    fun selectCardDialog(gameViewModel: CardGameViewModel) {
+        val showDialog = gameViewModel.showSelectCardDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(text = "Please select a card!") },
+                confirmButton = { Button(onClick = { gameViewModel.setShowSelectCardDialog(false) }) { Text("OK") } },
+            )
         }
-    }
-
-    @Composable
-    fun errorDialog(message: String, onDismiss: () -> Unit) {
-        AlertDialog(onDismissRequest = { onDismiss() }, title = {
-            Text(text = "Error")
-        }, text = {
-            Text(text = message)
-        }, confirmButton = {
-            Button(onClick = {
-                onDismiss()
-            }) {
-                Text(text = "OK")
-            }
-        }, properties = DialogProperties()
-        )
     }
 }

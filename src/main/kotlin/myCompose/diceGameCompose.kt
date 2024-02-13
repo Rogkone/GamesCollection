@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +25,7 @@ object diceGameCompose {
     @Composable
     fun diceGameMain(gameViewModel: DiceGameViewModel, onBack: () -> Unit) {
 
-        Column(modifier = Modifier.fillMaxSize()){
+        Column(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.weight(1f)) {
                 table(gameViewModel, Modifier.weight(1f))
                 dice(gameViewModel, Modifier.weight(1f))
@@ -57,13 +54,17 @@ object diceGameCompose {
                 Row() {
                     tableCell(text = "YAHTZEE", weight = column1Weight)
                     tableCell(text = "Points", weight = column2Weight)
-                    tableCell(text = "How to", weight = column3Weight)
+                    tableCell(text = "How to calculate score", weight = column3Weight)
                 }
             }
             // content
             itemsIndexed(pointSheet.scores.entries.toList()) { _, entry ->
                 Row(Modifier.fillMaxWidth()) {
-                    tableCell(text = entry.key, weight = column1Weight, borderWeight = if (entry.key in fatList) 2.dp else 1.dp)
+                    tableCell(
+                        text = entry.key,
+                        weight = column1Weight,
+                        borderWeight = if (entry.key in fatList) 2.dp else 1.dp
+                    )
                     if (entry.key in fatList) {
                         tableCell(
                             text = entry.value?.toString() ?: roll.calcCurrentScore(entry.key).toString(),
@@ -97,7 +98,11 @@ object diceGameCompose {
                         "Chance" -> howToText = "Add total of all dice."
                         "Yahtzee" -> howToText = "Score 50 points for a Yahtzee (5 of a kind)."
                     }
-                    tableCell(text = howToText, weight = column3Weight, borderWeight = if (entry.key in fatList) 2.dp else 1.dp)
+                    tableCell(
+                        text = howToText,
+                        weight = column3Weight,
+                        borderWeight = if (entry.key in fatList) 2.dp else 1.dp
+                    )
                 }
             }
         }
@@ -107,15 +112,18 @@ object diceGameCompose {
     fun RowScope.tableCell(
         text: String,
         weight: Float,
-        borderWeight: Dp = 1.dp
+        borderWeight: Dp = 1.dp,
+        background: Color = Color.White
     ) {
         Text(
             text = text,
             Modifier
+                .background(background)
                 .border(borderWeight, Color.Black)
                 .weight(weight)
                 .padding(8.dp)
                 .height(25.dp)
+
         )
     }
 
@@ -134,8 +142,7 @@ object diceGameCompose {
                     if (round.allowedToWrite && round.pointSheet.scores[key] == null) {
                         gameViewModel.writeScore(key, gameViewModel.gameState.value.roll.calcCurrentScore(key))
                         round.allowedToWrite = false
-                    }
-                // else error msg
+                    } else gameViewModel.setRollFirstDialog(true)
                 }
                 .border(1.dp, Color.Black)
                 .weight(weight)
@@ -155,9 +162,13 @@ object diceGameCompose {
 
         Column(
             modifier = modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Column {
+                Text("Click on a die to save it for the next roll.", fontSize = 20.sp)
+                Text("Click on a field in the points column to write down your score.", fontSize = 20.sp)
+            }
             Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
                 sortedDice.forEachIndexed { index, die ->
                     Image(
@@ -169,33 +180,56 @@ object diceGameCompose {
                     )
                 }
             }
-            Button(onClick = {
-                if (diceRoll.rollCount < 2 && gameState.allowedToWrite) gameViewModel.rollDice()
-                else if (gameState.isGameComplete()) gameViewModel.setShowDialog(true)
-                else gameViewModel.resetDiceOrPrepareNewGame()
-            },
+
+            Text("Roll ${diceRoll.rollCount + 1}/3", fontSize = 20.sp)
+
+            Button(
+                onClick = {
+                    if (diceRoll.rollCount < 2 && gameState.allowedToWrite) gameViewModel.rollDice()
+                    else if (gameState.isGameComplete()) gameViewModel.setShowNameInputDialog(true)
+                    else gameViewModel.resetDiceOrPrepareNewGame()
+                },
                 modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape),
                 shape = CircleShape,
-                ) {
+            ) {
                 Text(
                     if (diceRoll.rollCount < 2 && gameState.allowedToWrite) "Roll"
                     else if (gameState.isGameComplete()) "Save Data"
                     else "New Roll",
-                    fontSize = 50.sp)
+                    fontSize = 50.sp
+                )
             }
+            //safeModeCheckbox(gameViewModel)
+            Spacer(modifier = Modifier.size(50.dp))
         }
         NameInputDialog(gameViewModel)
+        writeFirstDialog(gameViewModel)
+        rollFirstDialog(gameViewModel)
+    }
+
+    @Composable
+    fun safeModeCheckbox(gameViewModel: DiceGameViewModel){
+        Row (
+            verticalAlignment = Alignment.CenterVertically
+        )
+        {
+            Checkbox(
+                checked = gameViewModel.safeMode.value,
+                onCheckedChange = { gameViewModel.setSafeMode(it) }
+            )
+            Text("Safe Mode", fontSize = 25.sp)
+        }
     }
 
     @Composable
     fun NameInputDialog(gameViewModel: DiceGameViewModel) {
-        val showDialog = gameViewModel.showDialog.collectAsState()
+        val showDialog = gameViewModel.showNameInputDialog.collectAsState()
         val userName = gameViewModel.userName.collectAsState()
 
         if (showDialog.value) {
             AlertDialog(
                 onDismissRequest = {
-                    gameViewModel.setShowDialog(false)
+                    gameViewModel.setShowNameInputDialog(false)
                 },
                 title = {
                     Text(text = "Enter Your Name:")
@@ -212,7 +246,7 @@ object diceGameCompose {
                 confirmButton = {
                     Button(
                         onClick = {
-                            gameViewModel.setShowDialog(false)
+                            gameViewModel.setShowNameInputDialog(false)
                             CBCalls.insertData(gameViewModel)
                             gameViewModel.resetDiceOrPrepareNewGame()
                         }
@@ -223,5 +257,30 @@ object diceGameCompose {
             )
         }
     }
+
+    @Composable
+    fun writeFirstDialog(gameViewModel: DiceGameViewModel) {
+        val showDialog = gameViewModel.showWriteFirstDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(text = "You must write a score before rolling again.") },
+                confirmButton = { Button(onClick = { gameViewModel.setWriteFirstDialog(false) }) { Text("OK") } },
+            )
+        }
+    }
+
+    @Composable
+    fun rollFirstDialog(gameViewModel: DiceGameViewModel) {
+        val showDialog = gameViewModel.showRollFirstDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(text = "You must roll before you can write again.") },
+                confirmButton = { Button(onClick = { gameViewModel.setRollFirstDialog(false) }) { Text("OK") } },
+            )
+        }
+    }
+
 }
 

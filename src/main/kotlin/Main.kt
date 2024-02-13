@@ -17,23 +17,14 @@ import myCompose.cardGameCompose.cardGameMain
 import myCompose.diceGameCompose.diceGameMain
 import myCompose.diceHighScores
 
-val initDeck = CardGame.getNewDeckAsync()
-val deckId = initDeck!!.deckID
-val deckSize = initDeck!!.remaining
-const val cardCount = 5
-const val playerCount = 4
-const val numberOfHumans = 1
-var trickString = ""
-val cardHeight = (Toolkit.getDefaultToolkit().screenSize.height / 10).dp
-
 fun main() = application {
     Window(title = "Games Collection", onCloseRequest = ::exitApplication, state = stateMainWindow()) {
         var activeGame by remember { mutableStateOf<String?>(null) }
 
         when (activeGame) {
             "cardGame" -> {
-                val cardGame by remember { mutableStateOf(CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)) }
-                cardGameMain(remember { mutableStateOf(cardGame) })
+                val cardGameViewModel = remember { CardGameViewModel() }
+                cardGameMain(cardGameViewModel) { activeGame = null}
             }
             "DiceGame" -> {
                 val diceGameViewModel = remember { DiceGameViewModel() }

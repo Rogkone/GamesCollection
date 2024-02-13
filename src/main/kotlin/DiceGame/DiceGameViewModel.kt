@@ -8,14 +8,35 @@ class DiceGameViewModel {
     private val _gameState = MutableStateFlow(DiceGameRound())
     val gameState: StateFlow<DiceGameRound> = _gameState.asStateFlow()
 
-    private val _showDialog = MutableStateFlow(false)
-    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
+    private val _showNameInputDialog = MutableStateFlow(false)
+    val showNameInputDialog: StateFlow<Boolean> = _showNameInputDialog.asStateFlow()
+
+    private val _showWriteFirstDialog = MutableStateFlow(false)
+    val showWriteFirstDialog: StateFlow<Boolean> = _showWriteFirstDialog.asStateFlow()
+
+    private val _showRollFirstDialog = MutableStateFlow(false)
+    val showRollFirstDialog: StateFlow<Boolean> = _showRollFirstDialog.asStateFlow()
+
+    private val _safeMode = MutableStateFlow(false)
+    val safeMode: StateFlow<Boolean> = _safeMode.asStateFlow()
 
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
 
-    fun setShowDialog(show: Boolean) {
-        _showDialog.value = show
+    fun setShowNameInputDialog(show: Boolean) {
+        _showNameInputDialog.value = show
+    }
+
+    fun setWriteFirstDialog(show: Boolean) {
+        _showWriteFirstDialog.value = show
+    }
+
+    fun setRollFirstDialog(show: Boolean) {
+        _showRollFirstDialog.value = show
+    }
+
+    fun setSafeMode(status: Boolean) {
+        _safeMode.value = status
     }
 
     fun setUserName(name: String) {
@@ -48,7 +69,7 @@ class DiceGameViewModel {
         if (_gameState.value.isGameComplete()) {
             _gameState.value = DiceGameRound()
         } else if (_gameState.value.roll.rollCount >= 2 && _gameState.value.allowedToWrite) {
-            println("You must write a score before rolling again.")
+            setWriteFirstDialog(true)
         } else {
             val newRoll = DiceRoll()
             _gameState.value = _gameState.value.copy(roll = newRoll, allowedToWrite = true)

@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import myCompose.diceGameCompose.tableCell
 import myCompose.diceGameCompose.tableCellClickable
@@ -25,7 +26,7 @@ object diceHighScores {
     fun table(onBack: () -> Unit) {
         val highScores: List<PointSheet> = CBCalls.getHighScores()
         val scoreKeys = highScores.firstOrNull()?.scores?.keys ?: emptySet()
-
+        var index = 0
         val column1Weight = .1f
         val column2Weight = .1f
 
@@ -38,7 +39,7 @@ object diceHighScores {
                     }
                     Row() {
                         tableCell(text = "Date", weight = column1Weight)
-                        highScores.forEach { tableCell(text = it.date, weight = column2Weight) }
+                        highScores.forEach { tableCell(text = it.date, weight = column2Weight, background = Color.LightGray) }
                     }
                 }
 
@@ -48,12 +49,13 @@ object diceHighScores {
                         Row(Modifier.fillMaxWidth()) {
                             borderWeight =
                                 if (key in listOf("Upper Sum", "Bonus", "Upper Total", "Lower Total", "Total")) 2.dp else 1.dp
-                            tableCell(text = key, weight = column1Weight, borderWeight=borderWeight)
+                            tableCell(text = key, weight = column1Weight, borderWeight=borderWeight, background = if (index % 2 == 0) Color.White else Color.LightGray)
                             highScores.forEach { pointSheet ->
                                 val scoreValue = pointSheet.scores[key]?.toString() ?: "N/A"
-                                tableCell(text = scoreValue, weight = column2Weight, borderWeight=borderWeight)
+                                tableCell(text = scoreValue, weight = column2Weight, borderWeight=borderWeight, background = if (index % 2 == 0) Color.White else Color.LightGray)
                             }
                         }
+                        index++
                     }
                 }
             }

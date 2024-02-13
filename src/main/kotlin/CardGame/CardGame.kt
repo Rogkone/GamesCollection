@@ -3,12 +3,12 @@ package CardGame
 import androidx.compose.runtime.*
 import kotlin.random.Random
 
-class CardGame(
-    private val numberOfPlayers: Int,
-    private val numberOfRounds: Int,
-    private val numberOfHumans: Int,
-    private val deckId: String,
-    private val availableCards: Int,
+data class CardGame(
+    val numberOfPlayers: Int,
+    val numberOfRounds: Int,
+    val numberOfHumans: Int,
+    val deckId: String,
+    val availableCards: Int,
     var trumpCard: Card = DrawCardResponse.createAsync(1, deckId)!!.cards[0]
 ) {
     val players: Array<CardPlayer>
