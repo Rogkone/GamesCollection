@@ -123,7 +123,6 @@ object diceGameCompose {
                 .weight(weight)
                 .padding(8.dp)
                 .height(25.dp)
-
         )
     }
 
@@ -207,19 +206,6 @@ object diceGameCompose {
         rollFirstDialog(gameViewModel)
     }
 
-    @Composable
-    fun safeModeCheckbox(gameViewModel: DiceGameViewModel){
-        Row (
-            verticalAlignment = Alignment.CenterVertically
-        )
-        {
-            Checkbox(
-                checked = gameViewModel.safeMode.value,
-                onCheckedChange = { gameViewModel.setSafeMode(it) }
-            )
-            Text("Safe Mode", fontSize = 25.sp)
-        }
-    }
 
     @Composable
     fun NameInputDialog(gameViewModel: DiceGameViewModel) {

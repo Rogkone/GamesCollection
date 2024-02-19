@@ -17,11 +17,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import java.awt.Toolkit
 
 import stateMainWindow
 
+// TODO Button Text stimmt nicht (end round)
+// TODO extra button press after round ?
+// TODO AI auto play ?
 // TODO Farbzwang für Spieler
 // TODO AI überarbeiten
 
@@ -30,7 +34,7 @@ object cardGameCompose {
 
     @Composable
     fun cardGameMain(gameViewModel: CardGameViewModel, onBack: () -> Unit) {
-        val gameState = gameViewModel.gameState
+        val gameState = gameViewModel.gameState.collectAsState()
 
         if (gameState.value.playedRounds == gameViewModel.cardCount) {
             gameViewModel.setWinnerText(gameState.value.getWinner(gameState.value.players))
@@ -41,9 +45,11 @@ object cardGameCompose {
         infoBoard(gameViewModel, onBack)
         selectCardDialog(gameViewModel)
 
-        if (gameState.value.recompTestVar %gameViewModel.playerCount == 0){
+        if (gameState.value.recompTestVar % gameViewModel.playerCount == 0){
             gameViewModel.gameState.value.gameRound.playedCards.clear()
             gameViewModel.gameState.value.gameRound.playedCardsHash.clear()
+            gameViewModel.trickString=""
+            gameViewModel.setWinnerText("")
         }
     }
 
@@ -110,7 +116,7 @@ object cardGameCompose {
                                     onClick = { gameViewModel.handleNextAction() },
                                     modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
                                 ) {
-                                    Text(nextButtonText, fontSize = 50.sp)
+                                    Text(nextButtonText, fontSize = 50.sp, textAlign = TextAlign.Center)
                                 }
                             }
                         }
@@ -151,7 +157,7 @@ object cardGameCompose {
                             modifier = Modifier.height(250.dp).width(100.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            singleHand(gameViewModel.gameState.value.players[index])
+                            singleHand(gameViewModel, index)
                         }
                     }
                 }
@@ -190,7 +196,8 @@ object cardGameCompose {
     }
 
     @Composable
-    fun singleHand(player: CardPlayer) {
+    fun singleHand(gameViewModel:CardGameViewModel, index: Int) {
+        val player = gameViewModel.gameState.value.players[index]
         Column {
             Text("${player.name}'s Hand:")
             Row {

@@ -6,11 +6,6 @@ data class DiceGameRound(
     var allowedToWrite:Boolean = true
 ) {
 
-    fun writeScore(key: String, score: Int): DiceGameRound {
-        pointSheet.updateScore(key, score)
-        return this.copy(pointSheet=pointSheet.updateScore(key,score))
-    }
-
     fun calcTotals(): DiceGameRound {
         val updatedPointSheet = pointSheet.withUpdatedScores(mapOf(
             "Upper Sum" to pointSheet.calcUpperSum(),

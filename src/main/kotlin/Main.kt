@@ -24,15 +24,18 @@ fun main() = application {
         when (activeGame) {
             "cardGame" -> {
                 val cardGameViewModel = remember { CardGameViewModel() }
-                cardGameMain(cardGameViewModel) { activeGame = null}
+                cardGameMain(cardGameViewModel) { activeGame = null }
             }
+
             "DiceGame" -> {
                 val diceGameViewModel = remember { DiceGameViewModel() }
                 diceGameMain(diceGameViewModel) { activeGame = null }
             }
+
             "Dice Highscores" -> {
                 diceHighScores.mainHighScore { activeGame = null }
             }
+
             null -> mainScreen(onGameStart = { game -> activeGame = game })
 
         }
@@ -45,24 +48,33 @@ fun mainScreen(onGameStart: (String) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        Button(
-            onClick = { onGameStart("cardGame") },
-            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
-            Text("Card Game",fontSize = 50.sp)
-        }
-        Spacer(modifier = Modifier.height(25.dp))
-        Button(
-            onClick = { onGameStart("DiceGame") },
-            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
-            Text("Dice Game",fontSize = 50.sp)
-        }
-        Spacer(modifier = Modifier.height(25.dp))
-        Button(
-            onClick = { onGameStart("Dice Highscores") },
-            modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)) {
-            Text("Dice Highscores",fontSize = 50.sp, textAlign = TextAlign.Center)
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text("Games Collection", fontSize = 60.sp)
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = { onGameStart("cardGame") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Card Game", fontSize = 50.sp)
+            }
+            Spacer(modifier = Modifier.height(25.dp))
+            Button(
+                onClick = { onGameStart("DiceGame") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Dice Game", fontSize = 50.sp)
+            }
+            Spacer(modifier = Modifier.height(25.dp))
+            Button(
+                onClick = { onGameStart("Dice Highscores") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Dice Highscores", fontSize = 50.sp, textAlign = TextAlign.Center)
+            }
         }
     }
 }

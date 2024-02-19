@@ -38,7 +38,7 @@ object diceHighScores {
                         highScores.forEach { tableCell(text = it.name, weight = column2Weight) }
                     }
                     Row() {
-                        tableCell(text = "Date", weight = column1Weight)
+                        tableCell(text = "Date", weight = column1Weight, background =  Color.LightGray)
                         highScores.forEach { tableCell(text = it.date, weight = column2Weight, background = Color.LightGray) }
                     }
                 }

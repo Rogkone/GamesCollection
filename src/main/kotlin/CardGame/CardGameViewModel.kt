@@ -1,9 +1,5 @@
 package CardGame
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +16,7 @@ class CardGameViewModel {
     private val _gameState = MutableStateFlow(CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize))
     val gameState: StateFlow<CardGame> = _gameState
 
-    private val _nextButtonText = MutableStateFlow("Next")
+    private val _nextButtonText = MutableStateFlow("")
     val nextButtonText: StateFlow<String> = _nextButtonText.asStateFlow()
 
     private val _currentPlayerName = MutableStateFlow(gameState.value.players[gameState.value.currentPlayerIndex].name)
@@ -31,6 +27,11 @@ class CardGameViewModel {
 
     private val _showSelectCardDialog = MutableStateFlow(false)
     val showSelectCardDialog: StateFlow<Boolean> = _showSelectCardDialog.asStateFlow()
+
+    init {
+        if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) setNextButtonText("Next Player")
+        else setNextButtonText("Play selected card!")
+    }
 
     fun setShowSelectCardDialog(show: Boolean) {
         _showSelectCardDialog.value = show
@@ -48,29 +49,28 @@ class CardGameViewModel {
         _currentPlayerName.value = text
     }
 
-
     fun handleNextAction() {
-        var gameOverTest by mutableStateOf(false)
-        val currentState = _gameState.value
+
         if (gameState.value.isGameOver()) {
-            getNextAction()
-            gameOverTest = true
+            gameOverAction()
+            if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) setNextButtonText("Next Player")
+            else setNextButtonText("Play selected card!")
+            return
         }
-        if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
+
+        if (gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex == -1
+            && gameState.value.gameRound.playedCards.size != gameState.value.players.size
+            && !gameState.value.players[gameState.value.currentPlayerIndex].isAI
+        ) {
+            setShowSelectCardDialog(true) //if no card chosen
+        } else {
             getNextAction()
             gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex = -1
-        } else {
-            if (gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex == -1 && gameState.value.gameRound.playedCards.size != gameState.value.players.size) {
-                setShowSelectCardDialog(true) //if no card chosen
-            } else {
-                getNextAction()
-                gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex = -1
-            }
         }
-        if (gameOverTest) {
+        if (gameState.value.isGameOver()) {
             setNextButtonText("Next Round")
-            gameOverTest = false
-        } else if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
+        }
+        else if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
             setNextButtonText("Next Player")
         } else {
             setNextButtonText("Play selected card!")
@@ -82,17 +82,18 @@ class CardGameViewModel {
         val gameState = this.gameState
         val currentGame = _gameState.value
         if (gameState.value.playedRounds == cardCount) {
-            DrawCardResponse.shuffelDeck(this.deckId)
-            trickString = ""
-            _gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
+            gameOverAction()
         } else {
             gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
-            //currentGame.endRound()
             if (gameState.value.gameRound.playedCards.size == gameState.value.players.size)
                 trickString = currentGame.endRound()
         }
+    }
 
-
+    fun gameOverAction() {
+        DrawCardResponse.shuffelDeck(this.deckId)
+        trickString = ""
+        _gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
     }
 
 }

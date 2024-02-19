@@ -43,26 +43,20 @@ data class CardGame(
     }
 
     fun currentPlayerTurn(currentPlayer: CardPlayer) {
-        if (!currentPlayer.isAI)
-            print("Test")
         val cardIndex = currentPlayer.getPlayerCardIndex(gameRound.playedCards, gameRound.trump.suit)
         gameRound.addCard(currentPlayer.name, currentPlayer.hand.cards[cardIndex])
         currentPlayer.hand.removeCard(currentPlayer.hand.cards[cardIndex])
         if (!currentPlayer.isAI)
             currentPlayer.selectedCardIndex=-1
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size
-        //playedRounds++ also recomposes, but destroys game logic
         recompTestVar++
-
     }
 
     fun endRound():String {
         val winningPlayerIndex = (gameRound.getWinningPlayer() + currentPlayerIndex) % players.size
-
         players[winningPlayerIndex].score++
         currentPlayerIndex = winningPlayerIndex
-        playedRounds++ // triggers recomp
-
+        playedRounds++
         return getTrickMsg(winningPlayerIndex)
     }
 
