@@ -12,12 +12,12 @@ class CardGameViewModel {
     val initDeck = CardGame.getNewDeckAsync()
     val deckId = initDeck!!.deckID
     val deckSize = initDeck!!.remaining
-    var trickString=""
+    var trickString = ""
     val cardCount = 5
     val playerCount = 4
     val numberOfHumans = 1
 
-    private val _gameState = MutableStateFlow(CardGame(playerCount,cardCount,1,deckId, deckSize))
+    private val _gameState = MutableStateFlow(CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize))
     val gameState: StateFlow<CardGame> = _gameState
 
     private val _nextButtonText = MutableStateFlow("Next")
@@ -26,25 +26,25 @@ class CardGameViewModel {
     private val _currentPlayerName = MutableStateFlow(gameState.value.players[gameState.value.currentPlayerIndex].name)
     val currentPlayerName: StateFlow<String> = _currentPlayerName.asStateFlow()
 
-    private val _showErrorDialog = MutableStateFlow(false)
-    val showErrorDialog: StateFlow<Boolean> = _showErrorDialog.asStateFlow()
-
     private val _winnerText = MutableStateFlow("")
     val winnerText: StateFlow<String> = _winnerText.asStateFlow()
 
     private val _showSelectCardDialog = MutableStateFlow(false)
     val showSelectCardDialog: StateFlow<Boolean> = _showSelectCardDialog.asStateFlow()
 
-    fun setShowSelectCardDialog(show:Boolean){
+    fun setShowSelectCardDialog(show: Boolean) {
         _showSelectCardDialog.value = show
     }
+
     fun setWinnerText(text: String) {
         _winnerText.value = text
     }
-    fun setNextButtonText(text:String){
+
+    fun setNextButtonText(text: String) {
         _nextButtonText.value = text
     }
-    fun setCurrentPlayerName(text:String){
+
+    fun setCurrentPlayerName(text: String) {
         _currentPlayerName.value = text
     }
 
@@ -67,9 +67,7 @@ class CardGameViewModel {
                 gameState.value.players[gameState.value.currentPlayerIndex].selectedCardIndex = -1
             }
         }
-        if (gameState.value.gameRound.playedCards.size == playerCount) {
-            setNextButtonText("Show Winner")
-        } else if (gameOverTest) {
+        if (gameOverTest) {
             setNextButtonText("Next Round")
             gameOverTest = false
         } else if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
@@ -86,11 +84,12 @@ class CardGameViewModel {
         if (gameState.value.playedRounds == cardCount) {
             DrawCardResponse.shuffelDeck(this.deckId)
             trickString = ""
-            _gameState.value = CardGame(playerCount,cardCount,1,deckId, deckSize)
+            _gameState.value = CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize)
         } else {
-            if (gameState.value.gameRound.playedCards.size == gameState.value.players.size) {
-                trickString = gameState.value.endRound()
-            } else gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
+            gameState.value.currentPlayerTurn(gameState.value.players[gameState.value.currentPlayerIndex])
+            //currentGame.endRound()
+            if (gameState.value.gameRound.playedCards.size == gameState.value.players.size)
+                trickString = currentGame.endRound()
         }
 
 

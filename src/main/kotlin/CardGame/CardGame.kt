@@ -16,7 +16,7 @@ data class CardGame(
     var playedRounds by mutableStateOf(0)
     var gameRound: CardGameRound = CardGameRound(trumpCard)
     var currentPlayerIndex: Int
-
+    var recompTestVar by mutableStateOf(0)
     init {
         val rnd = Random
         if (numberOfPlayers * numberOfRounds > availableCards - 1 || numberOfPlayers * numberOfRounds < 2) {
@@ -51,6 +51,9 @@ data class CardGame(
         if (!currentPlayer.isAI)
             currentPlayer.selectedCardIndex=-1
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size
+        //playedRounds++ also recomposes, but destroys game logic
+        recompTestVar++
+
     }
 
     fun endRound():String {
@@ -58,7 +61,7 @@ data class CardGame(
 
         players[winningPlayerIndex].score++
         currentPlayerIndex = winningPlayerIndex
-        playedRounds++
+        playedRounds++ // triggers recomp
 
         return getTrickMsg(winningPlayerIndex)
     }

@@ -1,7 +1,6 @@
 package myCompose
 
 import CardGame.*
-import DiceGame.DiceGameViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.sp
 import java.awt.Toolkit
 
-
 import stateMainWindow
 
 // TODO Farbzwang für Spieler
@@ -38,12 +36,15 @@ object cardGameCompose {
             gameViewModel.setWinnerText(gameState.value.getWinner(gameState.value.players))
         }
 
-
-
         playedCards(gameViewModel)
         playerHands(gameViewModel)
         infoBoard(gameViewModel, onBack)
         selectCardDialog(gameViewModel)
+
+        if (gameState.value.recompTestVar %gameViewModel.playerCount == 0){
+            gameViewModel.gameState.value.gameRound.playedCards.clear()
+            gameViewModel.gameState.value.gameRound.playedCardsHash.clear()
+        }
     }
 
     @Composable
@@ -191,7 +192,7 @@ object cardGameCompose {
     @Composable
     fun singleHand(player: CardPlayer) {
         Column {
-            Text("${player.name}'s CardGame.Hand:")
+            Text("${player.name}'s Hand:")
             Row {
                 player.hand.cards.forEachIndexed { index, card ->
                     val active = index == player.selectedCardIndex
