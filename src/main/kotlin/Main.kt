@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
+import minesweeper.Board
+import minesweeper.MinesweeperGameState
+import myCompose.MinesweeperCompose.gameScreen
 import java.awt.Toolkit
 import myCompose.cardGameCompose.cardGameMain
 import myCompose.diceGameCompose.diceGameMain
@@ -25,6 +28,11 @@ fun main() = application {
             "cardGame" -> {
                 val cardGameViewModel = remember { CardGameViewModel() }
                 cardGameMain(cardGameViewModel) { activeGame = null }
+            }
+
+            "Minesweeper" -> {
+                val minesweeperGameState = remember {(Board.createBoard(10,10))}
+                gameScreen(MinesweeperGameState(minesweeperGameState)){ activeGame = null }
             }
 
             "DiceGame" -> {
@@ -61,14 +69,23 @@ fun mainScreen(onGameStart: (String) -> Unit) {
             ) {
                 Text("Card Game", fontSize = 50.sp)
             }
-            Spacer(modifier = Modifier.height(25.dp))
+            Button(
+                onClick = { onGameStart("Minesweeper") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Minesweeper", fontSize = 50.sp)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ){
             Button(
                 onClick = { onGameStart("DiceGame") },
                 modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
             ) {
                 Text("Dice Game", fontSize = 50.sp)
             }
-            Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = { onGameStart("Dice Highscores") },
                 modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)

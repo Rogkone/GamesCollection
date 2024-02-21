@@ -23,11 +23,12 @@ import java.awt.Toolkit
 
 import stateMainWindow
 
-// TODO Button Text stimmt nicht (end round)
-// TODO extra button press after round ?
-// TODO AI auto play ?
-// TODO Farbzwang für Spieler
-// TODO AI überarbeiten
+/*  TODO Double click to play card?
+    TODO AI auto play ?
+    TODO Farbzwang für Spieler
+    TODO AI überarbeiten
+
+     */
 
 object cardGameCompose {
     val cardHeight = (Toolkit.getDefaultToolkit().screenSize.height / 10).dp
@@ -36,16 +37,13 @@ object cardGameCompose {
     fun cardGameMain(gameViewModel: CardGameViewModel, onBack: () -> Unit) {
         val gameState = gameViewModel.gameState.collectAsState()
 
-        if (gameState.value.playedRounds == gameViewModel.cardCount) {
-            gameViewModel.setWinnerText(gameState.value.getWinner(gameState.value.players))
-        }
-
         playedCards(gameViewModel)
         playerHands(gameViewModel)
         infoBoard(gameViewModel, onBack)
         selectCardDialog(gameViewModel)
 
-        if (gameState.value.recompTestVar % gameViewModel.playerCount == 0){
+        if (gameState.value.recompTestVar % gameViewModel.playerCount == 0
+            && gameState.value.playedRounds != gameState.value.numberOfRounds){
             gameViewModel.gameState.value.gameRound.playedCards.clear()
             gameViewModel.gameState.value.gameRound.playedCardsHash.clear()
             gameViewModel.trickString=""

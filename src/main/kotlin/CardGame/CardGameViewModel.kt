@@ -55,6 +55,7 @@ class CardGameViewModel {
             gameOverAction()
             if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) setNextButtonText("Next Player")
             else setNextButtonText("Play selected card!")
+            setCurrentPlayerName(gameState.value.players[gameState.value.currentPlayerIndex].name)
             return
         }
 
@@ -69,6 +70,7 @@ class CardGameViewModel {
         }
         if (gameState.value.isGameOver()) {
             setNextButtonText("Next Round")
+            setWinnerText(gameState.value.getWinner(gameState.value.players))
         }
         else if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) {
             setNextButtonText("Next Player")

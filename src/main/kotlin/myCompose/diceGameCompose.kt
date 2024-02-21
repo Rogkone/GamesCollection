@@ -201,14 +201,14 @@ object diceGameCompose {
             //safeModeCheckbox(gameViewModel)
             Spacer(modifier = Modifier.size(50.dp))
         }
-        NameInputDialog(gameViewModel)
+        nameInputDialog(gameViewModel)
         writeFirstDialog(gameViewModel)
         rollFirstDialog(gameViewModel)
     }
 
 
     @Composable
-    fun NameInputDialog(gameViewModel: DiceGameViewModel) {
+    fun nameInputDialog(gameViewModel: DiceGameViewModel) {
         val showDialog = gameViewModel.showNameInputDialog.collectAsState()
         val userName = gameViewModel.userName.collectAsState()
 
