@@ -198,12 +198,21 @@ object diceGameCompose {
                     fontSize = 50.sp
                 )
             }
-            //safeModeCheckbox(gameViewModel)
+            Button(
+                onClick = {
+                    gameViewModel.setShowRulesDialog(true)
+                },
+                modifier = Modifier.height(150.dp).width(300.dp).clip(CircleShape),
+                shape = CircleShape,
+            ) {
+                Text("Show rules", fontSize = 50.sp)
+            }
             Spacer(modifier = Modifier.size(50.dp))
         }
         nameInputDialog(gameViewModel)
         writeFirstDialog(gameViewModel)
         rollFirstDialog(gameViewModel)
+        rulesDialog(gameViewModel)
     }
 
 
@@ -268,5 +277,20 @@ object diceGameCompose {
         }
     }
 
+    @Composable
+    fun rulesDialog(gameViewModel: DiceGameViewModel) {
+        val showDialog = gameViewModel.showRulesDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(text = "    Roll the Dice: At the start of your turn, roll all five dice. Based on the outcome, you can decide to keep some dice and re-roll the others to improve your combination.\n" +
+                        "\n" +
+                        "    Reroll: You have two chances to re-roll any of the five dice. You don't have to re-roll all the dice, just the ones that you think could improve your score based on the combination you're aiming for. Click on a die to save it for the next roll.\n" +
+                        "\n" +
+                        "    Choose a Scoring Category: After one to three rolls, choose one of the 15 categories for your scorecard. Each category has its own scoring rules (such as full house, straight, or specific numbers). Your goal is to fill in each category with the highest score possible. If your dice don't match any remaining categories, you'll have to choose one to score zero.") },
+                confirmButton = { Button(onClick = { gameViewModel.setShowRulesDialog(false) }) { Text("OK") } },
+            )
+        }
+    }
 }
 

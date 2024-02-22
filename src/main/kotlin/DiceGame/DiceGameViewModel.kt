@@ -17,8 +17,9 @@ class DiceGameViewModel {
     private val _showRollFirstDialog = MutableStateFlow(false)
     val showRollFirstDialog: StateFlow<Boolean> = _showRollFirstDialog.asStateFlow()
 
-    private val _safeMode = MutableStateFlow(false)
-    val safeMode: StateFlow<Boolean> = _safeMode.asStateFlow()
+    private val _showRulesDialog = MutableStateFlow(false)
+    val showRulesDialog: StateFlow<Boolean> = _showRulesDialog.asStateFlow()
+
 
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
@@ -27,16 +28,16 @@ class DiceGameViewModel {
         _showNameInputDialog.value = show
     }
 
+    fun setShowRulesDialog(show: Boolean) {
+        _showRulesDialog.value = show
+    }
+
     fun setWriteFirstDialog(show: Boolean) {
         _showWriteFirstDialog.value = show
     }
 
     fun setRollFirstDialog(show: Boolean) {
         _showRollFirstDialog.value = show
-    }
-
-    fun setSafeMode(status: Boolean) {
-        _safeMode.value = status
     }
 
     fun setUserName(name: String) {

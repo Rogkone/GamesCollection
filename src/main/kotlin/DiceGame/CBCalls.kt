@@ -72,11 +72,11 @@ object CBCalls {
                 val queryResult = cluster
                     .query("SELECT a.* FROM default:`dice-game-test` a ORDER BY a.`total` DESC LIMIT 10")
                     .execute()
+
                 queryResult.rows.forEach { row ->
                     val jsonString = String(row.content, Charset.defaultCharset())
                    highScoresList.add(parsePlayerScore(jsonString))
                 }
-                //println(queryResult.metadata)
             }
         }
         finally {

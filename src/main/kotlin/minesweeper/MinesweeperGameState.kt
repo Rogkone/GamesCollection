@@ -3,11 +3,19 @@ package minesweeper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class MinesweeperGameState(initialBoard: Board) {
     var board by mutableStateOf(initialBoard)
     var isExploded by mutableStateOf(false)
+    private val _showRulesDialog = MutableStateFlow(false)
+    val showRulesDialog: StateFlow<Boolean> = _showRulesDialog.asStateFlow()
 
+    fun setShowRulesDialog(show: Boolean) {
+        _showRulesDialog.value = show
+    }
     fun revealCell(x: Int, y: Int) {
         val cellsCopy = board.cells.map { it.map { cell -> cell.copy() }.toTypedArray() }.toTypedArray()
 

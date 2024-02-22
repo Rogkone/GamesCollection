@@ -1,6 +1,7 @@
 package myCompose
 
 import CardGame.*
+import DiceGame.DiceGameViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -41,12 +42,14 @@ object cardGameCompose {
         playerHands(gameViewModel)
         infoBoard(gameViewModel, onBack)
         selectCardDialog(gameViewModel)
+        rulesDialog(gameViewModel)
 
         if (gameState.value.recompTestVar % gameViewModel.playerCount == 0
-            && gameState.value.playedRounds != gameState.value.numberOfRounds){
+            && gameState.value.playedRounds != gameState.value.numberOfRounds
+        ) {
             gameViewModel.gameState.value.gameRound.playedCards.clear()
             gameViewModel.gameState.value.gameRound.playedCardsHash.clear()
-            gameViewModel.trickString=""
+            gameViewModel.trickString = ""
             gameViewModel.setWinnerText("")
         }
     }
@@ -63,13 +66,16 @@ object cardGameCompose {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(if (gameState.gameRound.playedCards.size != gameViewModel.playerCount) "$currentPlayerName has to play!" else "")
+                Text(
+                    if (gameState.gameRound.playedCards.size != gameViewModel.playerCount) "$currentPlayerName has to play!" else "",
+                    fontSize = 25.sp
+                )
 
                 Spacer(modifier = Modifier.height((stateMainWindow().size.height / 8) * 5))
-                Text(winnerText)
-                Spacer(modifier = Modifier.height(32.dp))
-                Text(gameViewModel.trickString)
-                Spacer(modifier = Modifier.height(32.dp))
+                Text(winnerText, fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(gameViewModel.trickString, fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -132,6 +138,15 @@ object cardGameCompose {
                                 ) {
                                     Text("Back to Main", fontSize = 25.sp)
                                 }
+                                Button(
+                                    onClick = {
+                                        gameViewModel.setShowRulesDialog(true)
+                                    },
+                                    modifier = Modifier.height(75.dp).width(200.dp).clip(CircleShape),
+                                    shape = CircleShape,
+                                ) {
+                                    Text("Show rules", fontSize = 25.sp)
+                                }
                             }
                         }
                     }
@@ -146,6 +161,7 @@ object cardGameCompose {
             Column(
                 modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(Modifier.height(150.dp))
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(minOf(gameViewModel.playerCount / 2, 3)),
                     modifier = Modifier.fillMaxWidth()
@@ -173,7 +189,6 @@ object cardGameCompose {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly
@@ -189,15 +204,16 @@ object cardGameCompose {
                         }
                     }
                 }
+                Spacer(Modifier.height(300.dp))
             }
         }
     }
 
     @Composable
-    fun singleHand(gameViewModel:CardGameViewModel, index: Int) {
+    fun singleHand(gameViewModel: CardGameViewModel, index: Int) {
         val player = gameViewModel.gameState.value.players[index]
         Column {
-            Text("${player.name}'s Hand:")
+            Text("${player.name}'s Hand:", fontSize = 30.sp)
             Row {
                 player.hand.cards.forEachIndexed { index, card ->
                     val active = index == player.selectedCardIndex
@@ -220,7 +236,7 @@ object cardGameCompose {
     @Composable
     fun trumpCard(gameViewModel: CardGameViewModel) {
         Column {
-            Text("Trump")
+            Text("Trump", fontSize = 30.sp)
             Image(
                 painterResource("Cards/${gameViewModel.gameState.value.trumpCard.code}.png"),
                 contentDescription = "",
@@ -236,9 +252,9 @@ object cardGameCompose {
             Column(
                 modifier = Modifier.padding(bottom = 16.dp)
             ) {
-                Text(gameViewModel.gameState.value.trumpCard.suit)
+                Text(gameViewModel.gameState.value.trumpCard.suit, fontSize = 30.sp)
                 for (player in gameViewModel.gameState.value.players) {
-                    Text("${player.name} - ${player.score}")
+                    Text("${player.name} - ${player.score}", fontSize = 30.sp)
                     totalScore += player.score
                 }
             }
@@ -253,6 +269,35 @@ object cardGameCompose {
                 onDismissRequest = {},
                 title = { Text(text = "Please select a card!") },
                 confirmButton = { Button(onClick = { gameViewModel.setShowSelectCardDialog(false) }) { Text("OK") } },
+            )
+        }
+    }
+    @Composable
+    fun rulesDialog(gameViewModel: CardGameViewModel) {
+            val showDialog = gameViewModel.showRulesDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text(text = "Getting Started:\n" +
+                        "\n" +
+                        "    Deal: At the beginning of each round, each player is dealt 5 cards from a standard deck. One additional card is drawn and placed face up; the suit of this card is the trump for the round. The rest of the deck is set aside as it won't be used in the round.\n" +
+                        "\n" +
+                        "    Trump Suit: The suit of the face-up card determines the trump suit, which beats cards of any other suit when played in a trick.\n" +
+                        "\n" +
+                        "Playing the Game:\n" +
+                        "\n" +
+                        "    Leading a Trick: A random player leads the first trick by playing any card from their hand. For subsequent tricks, the winner of the last trick leads.\n" +
+                        "\n" +
+                        "    Following Suit: When a trick is led, all other players must play a card of the same suit if they have one. If a player does not have a card of the leading suit, they may play a trump card or any other card if they have no trumps.\n" +
+                        "\n" +
+                        "    Winning a Trick: The highest trump card in the trick wins. If no trump card is played, the highest card of the leading suit wins. The winner of a trick collects the cards and leads the next trick.\n" +
+                        "\n" +
+                        "    No Trumps Played: If in any trick no trumps are played, the highest card of the suit that was led wins the trick.\n" +
+                        "\n" +
+                        "End of the Round:\n" +
+                        "\n" +
+                        "    After all 5 tricks have been played, the player who has won the most tricks wins the round.") },
+                confirmButton = { Button(onClick = { gameViewModel.setShowRulesDialog(false) }) { Text("OK") } },
             )
         }
     }

@@ -1,5 +1,6 @@
 package CardGame
 
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +14,9 @@ class CardGameViewModel {
     val playerCount = 4
     val numberOfHumans = 1
 
+    private val _showRulesDialog = MutableStateFlow(false)
+    val showRulesDialog: StateFlow<Boolean> = _showRulesDialog.asStateFlow()
+
     private val _gameState = MutableStateFlow(CardGame(playerCount, cardCount, numberOfHumans, deckId, deckSize))
     val gameState: StateFlow<CardGame> = _gameState
 
@@ -25,12 +29,19 @@ class CardGameViewModel {
     private val _winnerText = MutableStateFlow("")
     val winnerText: StateFlow<String> = _winnerText.asStateFlow()
 
+    private val _trickText = MutableStateFlow("")
+    val trickText: StateFlow<String> = _trickText.asStateFlow()
+
     private val _showSelectCardDialog = MutableStateFlow(false)
     val showSelectCardDialog: StateFlow<Boolean> = _showSelectCardDialog.asStateFlow()
 
     init {
         if (gameState.value.players[gameState.value.currentPlayerIndex].isAI) setNextButtonText("Next Player")
         else setNextButtonText("Play selected card!")
+    }
+
+    fun setShowRulesDialog(show: Boolean) {
+        _showRulesDialog.value = show
     }
 
     fun setShowSelectCardDialog(show: Boolean) {
@@ -50,6 +61,10 @@ class CardGameViewModel {
     }
 
     fun handleNextAction() {
+
+        if(gameState.value.recompTestVar%4 == 0){
+            //clear played cards
+        }
 
         if (gameState.value.isGameOver()) {
             gameOverAction()

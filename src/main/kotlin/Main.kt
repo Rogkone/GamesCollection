@@ -1,5 +1,6 @@
 import CardGame.*
 import DiceGame.*
+import lightsOut.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
 import minesweeper.Board
 import minesweeper.MinesweeperGameState
+import myCompose.LightsOutCompose.lightsOutGameScreen
 import myCompose.MinesweeperCompose.gameScreen
 import java.awt.Toolkit
 import myCompose.cardGameCompose.cardGameMain
@@ -31,8 +33,18 @@ fun main() = application {
             }
 
             "Minesweeper" -> {
-                val minesweeperGameState = remember {(Board.createBoard(10,10))}
-                gameScreen(MinesweeperGameState(minesweeperGameState)){ activeGame = null }
+                val minesweeperGameState = remember { (Board.createBoard(10, 10)) }
+                gameScreen(MinesweeperGameState(minesweeperGameState)) { activeGame = null }
+            }
+
+            "Lights Out3" -> {
+                val lightsOutGameState = remember { (LightsOutBoard.populateBoard(3)) }
+                lightsOutGameScreen(LightsOutGameState(lightsOutGameState)) { activeGame = null }
+            }
+
+            "Lights Out5" -> {
+                val lightsOutGameState = remember { (LightsOutBoard.populateBoard(5)) }
+                lightsOutGameScreen(LightsOutGameState(lightsOutGameState)) { activeGame = null }
             }
 
             "DiceGame" -> {
@@ -59,7 +71,7 @@ fun mainScreen(onGameStart: (String) -> Unit) {
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text("Games Collection", fontSize = 60.sp)
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -69,29 +81,43 @@ fun mainScreen(onGameStart: (String) -> Unit) {
             ) {
                 Text("Card Game", fontSize = 50.sp)
             }
+
+            Button(
+                onClick = { onGameStart("Lights Out3") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Lights Out 3x3", fontSize = 50.sp)
+            }
+            Button(
+                onClick = { onGameStart("Lights Out5") },
+                modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
+            ) {
+                Text("Lights Out 5x5", fontSize = 50.sp)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             Button(
                 onClick = { onGameStart("Minesweeper") },
                 modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
             ) {
                 Text("Minesweeper", fontSize = 50.sp)
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ){
             Button(
                 onClick = { onGameStart("DiceGame") },
                 modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
             ) {
-                Text("Dice Game", fontSize = 50.sp)
+                Text("Yahtzee", fontSize = 50.sp)
             }
             Button(
                 onClick = { onGameStart("Dice Highscores") },
                 modifier = Modifier.height(150.dp).width(400.dp).clip(CircleShape)
             ) {
-                Text("Dice Highscores", fontSize = 50.sp, textAlign = TextAlign.Center)
+                Text("Yahtzee Highscores", fontSize = 50.sp, textAlign = TextAlign.Center)
             }
+
         }
     }
 }
