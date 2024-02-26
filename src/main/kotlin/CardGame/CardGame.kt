@@ -1,6 +1,7 @@
 package CardGame
 
 import androidx.compose.runtime.*
+import kotlinx.coroutines.delay
 import kotlin.random.Random
 
 data class CardGame(
@@ -62,7 +63,7 @@ data class CardGame(
 
     fun getTrickMsg(winningPlayerIndex: Int):String {
         val winningCard = gameRound.playedCards[gameRound.getWinningPlayer()]
-        gameRound.playedCards.clear()
+        //gameRound.playedCards.clear()
         return ("${players[winningPlayerIndex].name} has taken a trick with ${winningCard}!")
     }
 

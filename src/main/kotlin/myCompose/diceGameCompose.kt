@@ -31,8 +31,8 @@ object diceGameCompose {
                 dice(gameViewModel, Modifier.weight(1f))
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                Button(onClick = onBack, modifier = Modifier.padding(16.dp)) {
-                    Text("Back to Main")
+                Button(onClick = onBack, modifier = Modifier.padding(16.dp).height(75.dp).width(200.dp).clip(CircleShape)) {
+                    Text("Back to Main", fontSize = 25.sp)
                 }
             }
         }
@@ -230,6 +230,7 @@ object diceGameCompose {
                     Text(text = "Enter Your Name:")
                 },
                 text = {
+                    Text("You got ${gameViewModel.gameState.value.pointSheet.calcLowerTotal()+gameViewModel.gameState.value.pointSheet.calcUpperTotal()} points!")
                     TextField(
                         value = userName.value,
                         onValueChange = { newValue ->

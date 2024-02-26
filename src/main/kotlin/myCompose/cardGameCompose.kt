@@ -1,9 +1,8 @@
 package myCompose
 
 import CardGame.*
-import DiceGame.DiceGameViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -13,23 +12,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.awt.Toolkit
 
 import stateMainWindow
 
-/*  TODO Double click to play card?
+/*
     TODO AI auto play ?
-    TODO Farbzwang für Spieler
     TODO AI überarbeiten
-
-     */
+*/
 
 object cardGameCompose {
     val cardHeight = (Toolkit.getDefaultToolkit().screenSize.height / 10).dp
@@ -41,8 +41,10 @@ object cardGameCompose {
         playedCards(gameViewModel)
         playerHands(gameViewModel)
         infoBoard(gameViewModel, onBack)
+
         selectCardDialog(gameViewModel)
         rulesDialog(gameViewModel)
+        wrongSuitDialog(gameViewModel)
 
         if (gameState.value.recompTestVar % gameViewModel.playerCount == 0
             && gameState.value.playedRounds != gameState.value.numberOfRounds
@@ -70,7 +72,6 @@ object cardGameCompose {
                     if (gameState.gameRound.playedCards.size != gameViewModel.playerCount) "$currentPlayerName has to play!" else "",
                     fontSize = 25.sp
                 )
-
                 Spacer(modifier = Modifier.height((stateMainWindow().size.height / 8) * 5))
                 Text(winnerText, fontSize = 25.sp)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -223,15 +224,63 @@ object cardGameCompose {
                         modifier = Modifier.height(cardHeight)
                     )
                     else {
-                        Image(painterResource("Cards/${card.code}.png"),
-                            contentDescription = "",
-                            modifier = Modifier.height(height = if (active) cardHeight.times(1.2.toFloat()) else cardHeight)
-                                .clickable { player.selectedCardIndex = index })
+                        clickableImage(
+                            cardCode = card.code,
+                            cardHeight = cardHeight,
+                            active = active,
+                            onSingleClick = { player.selectedCardIndex = index },
+                            onDoubleClick = {
+                                if (gameViewModel.gameState.value.currentPlayerIndex == 0) {
+                                    player.selectedCardIndex = index
+                                    gameViewModel.handleNextAction()
+                                }
+                            }
+                        )
                     }
                 }
             }
         }
     }
+
+    @Composable
+    private fun clickableImage(
+        cardCode: String,
+        cardHeight: Dp,
+        active: Boolean,
+        onSingleClick: () -> Unit,
+        onDoubleClick: () -> Unit
+    ) {
+        var clickCount by remember { mutableStateOf(0) }
+        val coroutineScope = rememberCoroutineScope()
+
+        Image(
+            painter = painterResource("Cards/$cardCode.png"),
+            contentDescription = "",
+            modifier = Modifier
+                .height(height = if (active) cardGameCompose.cardHeight.times(1.2.toFloat()) else cardHeight)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onPress = {
+                            clickCount++
+                            coroutineScope.launch {
+                                delay(500) // for double click detection
+                                if (clickCount == 1) {
+                                    onSingleClick()
+                                } else if (clickCount > 1) {
+                                    onDoubleClick()
+                                }
+                                clickCount = 0
+                            }
+                        }
+                    )
+                }
+        )
+    }
+
+    private fun Modifier.detectTapGestures(onPress: suspend () -> Unit): Modifier =
+        this.pointerInput(Unit) {
+            detectTapGestures(onPress = { onPress() })
+        }
 
     @Composable
     fun trumpCard(gameViewModel: CardGameViewModel) {
@@ -272,31 +321,48 @@ object cardGameCompose {
             )
         }
     }
+
     @Composable
-    fun rulesDialog(gameViewModel: CardGameViewModel) {
-            val showDialog = gameViewModel.showRulesDialog.collectAsState()
+    fun wrongSuitDialog(gameViewModel: CardGameViewModel) {
+        val showDialog = gameViewModel.showWrongSuitDialog.collectAsState()
         if (showDialog.value) {
             AlertDialog(
                 onDismissRequest = {},
-                title = { Text(text = "Getting Started:\n" +
-                        "\n" +
-                        "    Deal: At the beginning of each round, each player is dealt 5 cards from a standard deck. One additional card is drawn and placed face up; the suit of this card is the trump for the round. The rest of the deck is set aside as it won't be used in the round.\n" +
-                        "\n" +
-                        "    Trump Suit: The suit of the face-up card determines the trump suit, which beats cards of any other suit when played in a trick.\n" +
-                        "\n" +
-                        "Playing the Game:\n" +
-                        "\n" +
-                        "    Leading a Trick: A random player leads the first trick by playing any card from their hand. For subsequent tricks, the winner of the last trick leads.\n" +
-                        "\n" +
-                        "    Following Suit: When a trick is led, all other players must play a card of the same suit if they have one. If a player does not have a card of the leading suit, they may play a trump card or any other card if they have no trumps.\n" +
-                        "\n" +
-                        "    Winning a Trick: The highest trump card in the trick wins. If no trump card is played, the highest card of the leading suit wins. The winner of a trick collects the cards and leads the next trick.\n" +
-                        "\n" +
-                        "    No Trumps Played: If in any trick no trumps are played, the highest card of the suit that was led wins the trick.\n" +
-                        "\n" +
-                        "End of the Round:\n" +
-                        "\n" +
-                        "    After all 5 tricks have been played, the player who has won the most tricks wins the round.") },
+                title = { Text(text = "You have to follow suit!") },
+                confirmButton = { Button(onClick = { gameViewModel.setShowWrongSuitDialog(false) }) { Text("OK") } },
+            )
+        }
+    }
+
+    @Composable
+    fun rulesDialog(gameViewModel: CardGameViewModel) {
+        val showDialog = gameViewModel.showRulesDialog.collectAsState()
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Text(
+                        text = "Getting Started:\n" +
+                                "\n" +
+                                "    Deal: At the beginning of each round, each player is dealt 5 cards from a standard deck. One additional card is drawn and placed face up; the suit of this card is the trump for the round. The rest of the deck is set aside as it won't be used in the round.\n" +
+                                "\n" +
+                                "    Trump Suit: The suit of the face-up card determines the trump suit, which beats cards of any other suit when played in a trick.\n" +
+                                "\n" +
+                                "Playing the Game:\n" +
+                                "\n" +
+                                "    Leading a Trick: A random player leads the first trick by playing any card from their hand. For subsequent tricks, the winner of the last trick leads.\n" +
+                                "\n" +
+                                "    Following Suit: When a trick is led, all other players must play a card of the same suit if they have one. If a player does not have a card of the leading suit, they may play a trump card or any other card if they have no trumps.\n" +
+                                "\n" +
+                                "    Winning a Trick: The highest trump card in the trick wins. If no trump card is played, the highest card of the leading suit wins. The winner of a trick collects the cards and leads the next trick.\n" +
+                                "\n" +
+                                "    No Trumps Played: If in any trick no trumps are played, the highest card of the suit that was led wins the trick.\n" +
+                                "\n" +
+                                "End of the Round:\n" +
+                                "\n" +
+                                "    After all 5 tricks have been played, the player who has won the most tricks wins the round."
+                    )
+                },
                 confirmButton = { Button(onClick = { gameViewModel.setShowRulesDialog(false) }) { Text("OK") } },
             )
         }

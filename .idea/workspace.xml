@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="week 2 finished, still stuff to do">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/lightsOut/Cell.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/lightsOut/LightsOutBoard.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/lightsOut/LightsOutGameState.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/LightsOutCompose.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGame.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGame.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGameViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/CardGame/CardGameViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/CBCalls.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/CBCalls.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/minesweeper/MinesweeperGameState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/minesweeper/MinesweeperGameState.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/MinesweeperCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/MinesweeperCompose.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/cardGameCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/cardGameCompose.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" afterDir="false" />
     </list>
@@ -179,12 +171,11 @@
   <component name="XDebuggerManager">
     <pin-to-top-manager>
       <pinned-members>
-        <PinnedItemInfo parentTag="CardGame.Hand" memberName="cards" />
         <PinnedItemInfo parentTag="CardGame" memberName="playedRounds" />
         <PinnedItemInfo parentTag="androidx.compose.runtime.SnapshotMutableStateImpl" memberName="value" />
+        <PinnedItemInfo parentTag="CardGame.CardGameRound" memberName="playedCards" />
         <PinnedItemInfo parentTag="java.lang.Boolean" memberName="value" />
         <PinnedItemInfo parentTag="DiceGame.DiceRoll" memberName="rollCount" />
-        <PinnedItemInfo parentTag="kotlinx.coroutines.flow.StateFlowImpl" memberName="_state$volatile" />
       </pinned-members>
     </pin-to-top-manager>
     <watches-manager>
@@ -193,6 +184,7 @@
       </configuration>
       <configuration name="GradleRunConfiguration">
         <watch expression="(this as CardGame).gameRound" language="kotlin" custom="import CardGame" />
+        <watch expression="((CardGame.CardGame)((StateFlowImpl)((CardGameViewModel)this)._gameState)._state$volatile).players[1]" custom="kotlinx.coroutines.flow.StateFlowImpl,CardGame.CardGameViewModel,CardGame.CardGame" />
       </configuration>
       <inline-watch fileUrl="file://$PROJECT_DIR$/src/main/kotlin/DiceGame/DiceGameRound.kt" line="4">
         <watch expression="((DiceGameRound)this).allowedToWrite" custom="DiceGame.DiceGameRound" />
