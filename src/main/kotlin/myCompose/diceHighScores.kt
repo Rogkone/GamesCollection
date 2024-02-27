@@ -6,13 +6,16 @@ import DiceGame.PointSheet
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import myCompose.diceGameCompose.tableCell
 import myCompose.diceGameCompose.tableCellClickable
 
@@ -61,8 +64,8 @@ object diceHighScores {
             }
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                Button(onClick = onBack, modifier = Modifier.padding(16.dp)) {
-                    Text("Back to Main")
+                Button(onClick = onBack, modifier = Modifier.padding(16.dp).height(75.dp).width(200.dp).clip(CircleShape)) {
+                    Text("Back to Main", fontSize = 25.sp)
                 }
             }
         }

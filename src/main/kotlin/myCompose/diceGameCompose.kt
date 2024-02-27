@@ -164,10 +164,7 @@ object diceGameCompose {
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column {
-                Text("Click on a die to save it for the next roll.", fontSize = 20.sp)
-                Text("Click on a field in the points column to write down your score.", fontSize = 20.sp)
-            }
+            Spacer(Modifier.height(25.dp))
             Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
                 sortedDice.forEachIndexed { index, die ->
                     Image(
@@ -227,10 +224,9 @@ object diceGameCompose {
                     gameViewModel.setShowNameInputDialog(false)
                 },
                 title = {
-                    Text(text = "Enter Your Name:")
+                    Text("You got ${gameViewModel.gameState.value.pointSheet.calcLowerTotal()+gameViewModel.gameState.value.pointSheet.calcUpperTotal()} points! Enter Your Name:")
                 },
                 text = {
-                    Text("You got ${gameViewModel.gameState.value.pointSheet.calcLowerTotal()+gameViewModel.gameState.value.pointSheet.calcUpperTotal()} points!")
                     TextField(
                         value = userName.value,
                         onValueChange = { newValue ->
