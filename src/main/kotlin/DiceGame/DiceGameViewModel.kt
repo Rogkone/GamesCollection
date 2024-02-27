@@ -20,7 +20,6 @@ class DiceGameViewModel {
     private val _showRulesDialog = MutableStateFlow(false)
     val showRulesDialog: StateFlow<Boolean> = _showRulesDialog.asStateFlow()
 
-
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
 

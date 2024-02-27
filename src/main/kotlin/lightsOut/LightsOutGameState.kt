@@ -14,6 +14,7 @@ class LightsOutGameState(initBoard:LightsOutBoard) {
     private val _showRulesDialog = MutableStateFlow(false)
     val showRulesDialog: StateFlow<Boolean> = _showRulesDialog.asStateFlow()
 
+
     fun setShowRulesDialog(show: Boolean) {
         _showRulesDialog.value = show
     }
