@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a3c791d3-3cf3-4567-80ad-00bce80a628c" name="Changes" comment="week 2 finished, still stuff to do">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceGameCompose.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceHighScores.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/diceHighScores.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/lightsOut/LightsOutBoard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/lightsOut/LightsOutBoard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/minesweeper/Cell.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/minesweeper/Cell.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/minesweeper/MinesweeperGameState.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/minesweeper/MinesweeperGameState.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/myCompose/MinesweeperCompose.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/myCompose/MinesweeperCompose.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

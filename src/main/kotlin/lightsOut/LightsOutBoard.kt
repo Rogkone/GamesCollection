@@ -13,6 +13,9 @@ companion object {
                 Cell(x, y, Random.nextBoolean())
             }
         }
+
+        
+
         return LightsOutBoard(size, cells)
     }
 }

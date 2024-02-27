@@ -112,7 +112,7 @@ object MinesweeperCompose {
                             text = if (cell.isRevealed) if (cell.isMine) "M" else if (cell.adjacentMinesCount == 0) "" else cell.adjacentMinesCount.toString() else if (cell.isFlagged) "F" else "",
                             onClick = { gameState.revealCell(cell.x, cell.y) },
                             onRightClick = { gameState.toggleFlagCell(cell.x, cell.y) },
-                            background = if (cell.isMine && cell.isRevealed) Color.Red else if (cell.isRevealed) Color.White else  Color.Gray
+                            background = if (cell.isMine && cell.isFlagged && cell.isRevealed) Color.Green else if (cell.isMine && cell.isRevealed) Color.Red else if (cell.isRevealed) Color.White else  Color.Gray
                         )
                     }
                 }

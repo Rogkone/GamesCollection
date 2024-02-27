@@ -21,6 +21,7 @@ class MinesweeperGameState(initialBoard: Board) {
 
         if (cellsCopy[y][x].isMine && !cellsCopy[y][x].isFlagged && !isExploded) {
             cellsCopy[y][x] = cellsCopy[y][x].copy(isRevealed = true)
+            cellsCopy.flatten().forEach {if(it.isMine) it.isRevealed=true}
             isExploded=true
         }
         fun recursiveReveal(x: Int, y: Int) {
